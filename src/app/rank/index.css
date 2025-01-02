@@ -1,0 +1,49 @@
+.rank {
+  background-color: #00b2ff;
+  color: white;
+  width: 25px;
+  line-height: 25px;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.rank-1 {
+  background-color: #20d489;
+}
+
+.rank-2 {
+  background-color: #f1416c;
+}
+
+.rank-3 {
+  background-color: #ffc700;
+}
+
+.rank-item {
+  border-radius: 10px;
+  /* border: 1px solid @; */
+  padding: 15px 28px;
+  background: linear-gradient(95deg, #daeefc, #c8cffb);
+}
+
+/* .rank-round {
+  position: absolute;
+  top: 0;
+  right: -15%;
+  bottom: 0;
+  width: 35%;
+  border-top-left-radius: 40%;
+  border-bottom-left-radius: 40%;
+  background: linear-gradient(95deg, #daeefc, #c8cffb);
+} */
+/* .rank-item-1{
+  background: linear-gradient(95deg, #b797be, #a77aae);
+}
+
+.rank-item-2{
+  background: linear-gradient(95deg, #deb976, #d3a04f);
+}
+
+.rank-item-3{
+  background: linear-gradient(95deg, #8fbec4, #daeaed);
+} */
