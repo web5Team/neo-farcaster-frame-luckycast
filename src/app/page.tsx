@@ -11,7 +11,7 @@ const frame = {
       name: 'LuckyCast',
       url:
         process.env.NODE_ENV === 'development'
-          ? 'https://9d96-23-185-208-68.ngrok-free.app'
+          ? 'https://pagedev.tagzxia.com/'
           : 'https://wrapcast-frame.vercel.app/',
       splashImageUrl: `https://frames-v2.vercel.app/splash.png`,
       splashBackgroundColor: '#f7f7f7',
