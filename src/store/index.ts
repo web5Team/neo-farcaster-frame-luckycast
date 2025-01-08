@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from "next-redux-wrapper";
 import mainSlice from './mainSlice';
 
- const makeStore = ()=>configureStore({
+const makeStore = () => configureStore({
   reducer: {
     counter: mainSlice,
   },

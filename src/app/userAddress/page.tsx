@@ -8,29 +8,78 @@ import { Input, message, Modal } from 'antd'
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
 import { Button } from '@/components/ui/Button'
-import banner from '@/image/WechatIMG263.jpg'
+import banner from '@/image/BgHeader.png'
+import avatar from '@/image/avatar.png'
+import help from '@/image/HELP_.png'
 import {
   useSumbitDataMutation,
   useVerifyTranspondMutation,
 } from '@/composables/api'
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import disposition from '@/composables/disposition'
+import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
+import './user-style.css'
+
 export default function UserAddress() {
+  const router = useRouter()
+  const { isConnected, address } = useAccount()
   const [context, setContext] = useState<FrameContext>()
-  const { address } = useAccount()
-  // const { connect } = useConnect()
+
   const [teamCode, setTeamCode] = useState('')
   const [verify, setVerify] = useState(false)
+  const [userInfo, setUserInfo] = useState({ picUrl: '', displayName: '', fid: -1, username: '' })
   const [messageApi, contextHolder] = message.useMessage()
   const { mutateAsync: SumbitData } = useSumbitDataMutation()
   const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation()
-  const router = useRouter()
+
+  async function trySignIn() {
+    const nonce = [...((address?.substring(0, 8) || '') + Date.now())].reverse().join('')
+
+    try {
+
+      const res = await sdk.actions.signIn({ nonce })
+      console.log("context", res)
+
+    } catch (_e) {
+      messageApi.warning('Please signin to continue')
+
+      trySignIn()
+    }
+  }
+
+  useEffect(() => {
+    if (isConnected) {
+      messageApi.success('Connected')
+      console.log(`钱包已连接，地址：${address}`);
+
+      setTimeout(async () => {
+        const res = (await sdk.context).user
+
+        if (res.username) {
+          setUserInfo({
+            fid: res.fid,
+            username: res.username,
+            displayName: res.displayName || '',
+            picUrl: res.pfpUrl || avatar.src,
+          })
+        } else {
+          trySignIn()
+        }
+
+      })
+    } else {
+      messageApi.error('Please connect your wallet first.')
+      router.push('/')
+    }
+  }, [isConnected, address]);
+
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
     }
     load()
   }, [])
+
   const [loading, setLoading] = useState({
     recastLoading: false,
     sumbitLoading: false,
@@ -109,49 +158,60 @@ export default function UserAddress() {
       })
     }
   }
-  const [showOpen,setShowOpen] = useState(false)
+  const [showOpen, setShowOpen] = useState(false)
+
   return (
     <>
-      <Common src={banner.src}>
+      <Common className='bg-[#EFFDEC]' src={banner.src}>
+        <div className="UserPage-Displayer">
+          <AccountUrlDisplayer text={address || ''} />
+        </div>
+
+        <div className='UserPage-Avatar z-10'>
+          <img src={userInfo.picUrl} alt="Avatar" />
+        </div>
         <>{contextHolder}</>
-        <div className="page-content pb-6">
-          <div className="flex justify-end text-sm text-[#999] hover:text-[#7866bb] transition-all   mt-2 mr-2 cursor-pointer">
-            <span onClick={()=>setShowOpen(true)} className="">help?</span>
+
+        <div className="relative bg-[#F7FBFA]  mt-[-25%] page-content pb-6">
+          <div onClick={() => setShowOpen(true)} className="absolute text-sm text-[#999] hover:text-[#7866bb] transition-all right-2 top-2 mt-2 mr-2 cursor-pointer">
+            <img src={help.src} alt="HELP" />
           </div>
-          <div className="flex  max-md:w-full pt-10  px-6 flex-col gap-1.5 text-base">
-            <div className="max-md:w-[112px] max-md:text-[14px] text-[#727a81]">
-              Your Address:
-            </div>
-            <div className="text-sm flex-1 mb-3  break-words dark:text-black">
-              {address || 'no Address'}
-              {/* 0xcc76a9BeEf0dF6F0ccD29515588c245F98744351 */}
-            </div>
-            <div className="max-md:w-[112px] max-md:text-[14px] text-[#727a81]">
-              Your Team Code:
+
+          <div className='pt-20 text-[24px] mx-8 font-bold'>
+            <p>@{userInfo.username}</p>
+          </div>
+
+          <div className="flex items-center pt-10  px-6 gap-1.5 text-base">
+            <div className="max-md:text-[14px] font-bold mx-1 text-[#727a81]">
+              Team Code
             </div>
             <Input
               value={teamCode}
-              className="w-[320px] max-md:w-full flex-1"
+              className="w-[150px] rounded-1xl py-2"
               onChange={(e) => setTeamCode(e.target.value)}
-              placeholder="(Optional)"
+              placeholder="Optional"
               variant="filled"
             />
-            <div className="mt-5 text-base flex justify-center items-center gap-6">
-              <Button
-                isLoading={loading.recastLoading}
-                isDefault={true}
-                onClick={recast}
-              >
-                Recast
-              </Button>
-              <Button isLoading={loading.sumbitLoading} onClick={sumbit}>
-                Sumbit
-              </Button>
-            </div>
           </div>
-          <Modal open={showOpen} onOk={()=>setShowOpen(false)} onCancel={()=>setShowOpen(false)}>
+
+          <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
             <div>this is a help session.</div>
           </Modal>
+        </div>
+
+        <div className="mt-5 mx-auto w-[80%] text-base flex flex-col justify-center items-center gap-6">
+          <Button
+            isLoading={loading.recastLoading}
+            isDefault={true}
+            onClick={recast}
+            className='bg-[#DCC1FE] text-white'
+          >
+            Recast
+          </Button>
+          <Button className='bg-[#A0A0A0]' isLoading={loading.sumbitLoading} onClick={sumbit}>
+            Sumbit
+          </Button>
+          <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>
         </div>
       </Common>
     </>

@@ -1,0 +1,41 @@
+.AppPage-Background {
+  z-index: 10;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 80%;
+
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.AppPage-Background-Img {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 80%);
+}
+
+.AppPage-Main {
+  z-index: 1;
+}
+
+.AppPage-Main .AppPage-Connection {
+  width: 80%;
+}
+
+.AppPage-Main .AppPage-Connection button {
+  padding: 10px !important;
+
+  width: 100%;
+  height: 64px;
+
+  text-align: center;
+  border-radius: 90px;
+  background-color: #77BB69 !important;
+}

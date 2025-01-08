@@ -13,10 +13,11 @@ const WagmiProvider = dynamic(
 );
 
 export function Providers({ session, children }: { session: Session | null, children: React.ReactNode }) {
+
   return (
     <SessionProvider session={session}>
       <WagmiProvider>
-        <RainbowKitProvider>
+        <RainbowKitProvider modalSize='compact' locale='en-US'>
           {children}
         </RainbowKitProvider>
       </WagmiProvider>

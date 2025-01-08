@@ -17,7 +17,7 @@ export function Button({
         isDefault
           ? 'text-[#7C65C1] bg-white border border-[#7C65C1] hover:text-white'
           : 'bg-[#7C65C1] text-white'
-      } py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#7C65C1] hover:bg-[#6952A3] ${className}`}
+      } py-4 px-6 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#7C65C1] hover:bg-[#6952A3] ${className}`}
       {...props}
     >
       {isLoading ? (

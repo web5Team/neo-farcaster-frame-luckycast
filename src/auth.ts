@@ -55,6 +55,8 @@ export const authOptions: AuthOptions = {
         })
         const { success, fid } = verifyResponse
 
+        console.log(verifyResponse)
+
         if (!success) {
           return null
         }
