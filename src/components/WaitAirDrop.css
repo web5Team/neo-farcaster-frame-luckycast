@@ -1,0 +1,23 @@
+.WaitPage-Displayer {
+  position: absolute;
+
+  top: 1rem;
+  right: 1rem;
+
+  padding: 6px 12px;
+  gap: 10px;
+  border-radius: 90px;
+
+  font-weight: 500;
+  color: #fff;
+  line-height: 24px;
+  border: 2px solid #fff;
+}
+
+.WaitPage-Main {
+  transition: 0.25s;
+}
+
+.WaitPage-Main.hidden {
+  opacity: 0;
+}

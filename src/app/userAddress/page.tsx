@@ -4,13 +4,14 @@ import React from 'react'
 // import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
-import { Input, message, Modal } from 'antd'
+import { Input, message } from 'antd'
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
 import { Button } from '@/components/ui/Button'
 import banner from '@/image/BgHeader.png'
 import avatar from '@/image/avatar.png'
 import help from '@/image/HELP_.png'
+import circleCheck from '@/image/check circle.svg'
 import {
   useSumbitDataMutation,
   useVerifyTranspondMutation,
@@ -19,6 +20,9 @@ import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import disposition from '@/composables/disposition'
 import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
 import './user-style.css'
+import InfoDialog from '@/components/ui/InfoDialog'
+import Wait from '../../components/WaitAirDrop'
+import { createPortal } from 'react-dom'
 
 export default function UserAddress() {
   const router = useRouter()
@@ -27,6 +31,7 @@ export default function UserAddress() {
 
   const [teamCode, setTeamCode] = useState('')
   const [verify, setVerify] = useState(false)
+  const [done, setDone] = useState(false)
   const [userInfo, setUserInfo] = useState({ picUrl: '', displayName: '', fid: -1, username: '' })
   const [messageApi, contextHolder] = message.useMessage()
   const { mutateAsync: SumbitData } = useSumbitDataMutation()
@@ -138,13 +143,13 @@ export default function UserAddress() {
             type: 'success',
             content: 'Join the team successfully',
           })
-          router.push('/wait')
+          setDone(true)
         } else if (res.msg == 'The current data has been submitted') {
           messageApi.open({
             type: 'info',
             content: "You've joined the team",
           })
-          router.push('/wait')
+          setDone(true)
         } else if (teamCode.trim() && res.code === 0) {
           messageApi.error('Team code error')
         }
@@ -177,7 +182,7 @@ export default function UserAddress() {
             <img src={help.src} alt="HELP" />
           </div>
 
-          <div className='pt-20 text-[24px] mx-8 font-bold'>
+          <div className='pt-20 text-[24px] text-black mx-8 font-bold'>
             <p>@{userInfo.username}</p>
           </div>
 
@@ -194,9 +199,35 @@ export default function UserAddress() {
             />
           </div>
 
-          <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
+          {/* <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
             <div>this is a help session.</div>
-          </Modal>
+          </Modal> */}
+
+          {done && createPortal((
+            <div className='UserPage-Wait'>
+              <Wait />
+            </div>
+          ), document.body)}
+
+          <InfoDialog emoji="🧐" isOpen={showOpen} onClose={() => setShowOpen(false)}>
+            <div className='text-black my-4 text-center'>
+              <p className='font-bold text-2xl'>HELP?</p>
+              <ul className="list-disc list-inside text-left text-[#868686]">
+                <li>
+                  <span className='-ml-2'>Recast first, then submit your information to claim the airdrop.</span>
+                </li>
+                <li>
+                  <span className='-ml-2'>Join a KOL team using a code to get a multiplier bonus.</span>
+                  </li>
+                <li>
+                  <span className='-ml-2'>Each FID can only be bound to one valid address to receive airdrops.</span>
+                  </li>
+                <li>
+                  <span className='-ml-2'>Stay tuned for more airdrops from Neo in the future.</span>
+                  </li>
+              </ul>
+            </div>
+          </InfoDialog>
         </div>
 
         <div className="mt-5 mx-auto w-[80%] text-base flex flex-col justify-center items-center gap-6">
@@ -206,7 +237,9 @@ export default function UserAddress() {
             onClick={recast}
             className='bg-[#DCC1FE] text-white'
           >
-            Recast
+            <div className='flex items-center justify-center gap-2'>
+              {verify && (<img src={circleCheck.src} alt="check" />)} Recast
+            </div>
           </Button>
           <Button className='bg-[#A0A0A0]' isLoading={loading.sumbitLoading} onClick={sumbit}>
             Sumbit

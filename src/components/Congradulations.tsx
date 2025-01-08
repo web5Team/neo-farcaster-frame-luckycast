@@ -4,7 +4,7 @@ import Common from '@/components/ui/common'
 import { message } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import banner from '@/image/WechatIMG263.jpg'
+import circleCheck from '@/image/check circle.svg'
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import {
   useGetRewardMutation,
@@ -97,31 +97,35 @@ export default function Congratulations() {
     }
   }
   return (
-    <Common src={banner.src}>
+    <>
       <>{contextHolder}</>
       <div className="px-6 py-4 flex flex-col justify-between">
         <div>
-          <div className="text-2xl text-black in">Congratulations</div>
+          <div className="text-2xl text-black in text-center font-bold">Congratulations</div>
           {rewardData && (
-            <div className="mt-[5px] text-[#999] text-sm">
-              <span>You will get </span>
-              <span className="font-bold">
-                {rewardData.money} Gas
-              </span>
+            <div className="text-center font-size-[12px] my-2 text-[#999] text-sm">
+              <p>You&apos;ve earned</p>
+              <p className="my-4 text-3xl font-bold text-[#77BB69]">
+                {rewardData.money} GAS
+              </p>
             </div>
           )}
         </div>
-        <div className="mt-24 flex gap-6 justify-center items-center ">
+        <div className="mt-4 flex flex-col gap-6 justify-center items-center ">
           <Button
             isLoading={loading.recastLoading}
             onClick={recast}
             isDefault={true}
+            className='bg-[#DCC1FE] text-white'
           >
-            Recast
+            <div className='flex items-center justify-center gap-2'>
+              {verify && (<img src={circleCheck.src} alt="check" />)} Recast
+            </div>
           </Button>
-          <Button isLoading={loading.sumbitLoading} onClick={sumbit}>
+          <Button className='bg-[#A0A0A0]' isLoading={loading.sumbitLoading} onClick={sumbit}>
             Claim
           </Button>
+          <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>
         </div>
         {rewardData?.status === 3 && (
           <div className="text-xs font-bold text-center text-[#999] mt-3">
@@ -129,6 +133,6 @@ export default function Congratulations() {
           </div>
         )}
       </div>
-    </Common>
+    </>
   )
 }
