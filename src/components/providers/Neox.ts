@@ -34,11 +34,13 @@ export interface MyWalletOptions {
   projectId: string;
 }
 
-interface Window {
-  NEOLineNeoX: {
-    isNEOLine: boolean
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    NEOLineNeoX: any;
   }
 }
+
 export const neoX = ({ projectId }: MyWalletOptions): Wallet => {
 
   const hasNeoX = window.NEOLineNeoX?.isNEOLine

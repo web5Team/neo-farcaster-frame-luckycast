@@ -45,10 +45,12 @@ export default function UserAddress() {
       const res = await sdk.actions.signIn({ nonce })
       console.log("context", res)
 
-    } catch (_e) {
+    } catch (e) {
       messageApi.warning('Please signin to continue')
 
       trySignIn()
+
+      console.log(e)
     }
   }
 
