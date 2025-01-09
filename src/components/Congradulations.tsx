@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/Button'
-import Common from '@/components/ui/common'
 import { message } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
