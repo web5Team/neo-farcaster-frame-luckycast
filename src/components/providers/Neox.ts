@@ -39,6 +39,13 @@ interface Window {
     isNEOLine: boolean
   }
 }
+
+declare global {
+  interface Window {
+    NEOLineNeoX: any;
+  }
+}
+
 export const neoX = ({ projectId }: MyWalletOptions): Wallet => {
 
   const hasNeoX = window.NEOLineNeoX?.isNEOLine
@@ -54,7 +61,7 @@ export const neoX = ({ projectId }: MyWalletOptions): Wallet => {
       ios: 'https://apps.apple.com/us/app/my-wallet',
       chrome: 'https://chrome.google.com/webstore/detail/my-wallet',
       qrCode: 'https://my-wallet/qr',
-       },
+    },
     mobile: {
       getUri: (uri: string) => uri,
     },
