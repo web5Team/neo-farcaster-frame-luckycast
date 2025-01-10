@@ -12,7 +12,7 @@ const frame = {
       url:
         process.env.NODE_ENV === 'development'
           ? 'https://pagedev.tagzxia.com/'
-          : 'https://neo-luckycast.netlify.app/',
+          : 'https://www.luckycast.xyz/',
       splashImageUrl: `https://frames-v2.vercel.app/splash.png`,
       splashBackgroundColor: '#f7f7f7',
     },
