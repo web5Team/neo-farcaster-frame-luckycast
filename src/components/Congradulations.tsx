@@ -20,11 +20,18 @@ export default function Congratulations() {
   const [context, setContext] = useState<FrameContext>()
   const { mutateAsync: GetReward } = useGetRewardMutation()
   const { mutateAsync: Receive } = useReceiveMutation()
-  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation()
+  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(disposition.second.verifyUrl)
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
       // console.log(context)
+
+      VerifyTranspond({ fid: (await sdk.context).user.fid + '' }).then((res) => {
+        if (res.message == 'Cast OK') {
+          setVerify(true)
+          messageApi.success('Recast Successfully')
+        }
+      })
     }
     load()
   }, [])
@@ -57,7 +64,7 @@ export default function Congratulations() {
           setVerify(true)
           messageApi.success('Recast Successfully')
         } else {
-          sdk.actions.openUrl(disposition.openUrl)
+          sdk.actions.openUrl(disposition.second.openUrl)
         }
       })
     }
