@@ -8,12 +8,13 @@ interface InfoDialogProps {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
+  className?: string
 }
 
-const InfoDialog: React.FC<InfoDialogProps> = ({ emoji, isOpen, onClose, children }) => {
+const InfoDialog: React.FC<InfoDialogProps> = ({ emoji, isOpen, onClose, className, children }) => {
 
   return isOpen ? createPortal((
-    <div className={styles.InfoDialog}>
+    <div className={`${styles.InfoDialog} ${className || ''}`}>
       <div className={styles.InfoDialogContainer}>
         <div className={styles.InfoDialogHeader}>
           <button className={styles.InfoDialogClose} onClick={onClose}>

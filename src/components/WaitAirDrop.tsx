@@ -49,19 +49,20 @@ export default function Wait() {
         </div>
       )}
 
-      <div className={'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' + (claim ? ' hidden' : '')}>
-        <h1 className='text-5xl'>🤩</h1>
-        <h1 className='text-3xl font-bold'>Wait for Airdrop!</h1>
-        <p className='max-w-[85%] text-[#C7C7C7] font-bold'>You have successfully submitted and are awaiting confirmation.</p>
-        {/* <Spin className='text-base font-bold' tip="wait..."></Spin> */}
-        <Button
-          isLoading={loading}
-          onClick={recast}
-          className="px-16 max-md:px-10"
-        >
-          Refresh status
-        </Button>
-      </div>
+      <InfoDialog isOpen={true} emoji="🤩" onClose={() => void 0} className={'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' + (claim ? ' hidden' : '')}>
+        <div className='text-center'>
+          <h1 className='text-3xl font-bold'>Great!</h1>
+          <p className='max-w-[85%] my-2 font-[12px] text-[#C7C7C7]'>You have successfully submitted and are awaiting confirmation.</p>
+          {/* <Spin className='text-base font-bold' tip="wait..."></Spin> */}
+          <Button
+            isLoading={loading}
+            onClick={recast}
+            className="px-16 max-md:px-10 mt-4"
+          >
+            Refresh status
+          </Button>
+        </div>
+      </InfoDialog>
 
       <InfoDialog emoji='🥳' isOpen={claim} onClose={() => setClaim(false)}>
         <Congratulations />
