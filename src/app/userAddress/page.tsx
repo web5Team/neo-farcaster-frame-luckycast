@@ -204,7 +204,6 @@ export default function UserAddress() {
 
         <div className="UserPage-Avatar z-10">
           <img src={avatar.src} alt="Avatar" />
-          <div onClick={()=>router.push('/rank')}>123</div>
         </div>
         <>{contextHolder}</>
 
