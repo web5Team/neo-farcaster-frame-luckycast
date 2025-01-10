@@ -17,7 +17,7 @@ export function Providers({ session, children }: { session: Session | null, chil
   return (
     <SessionProvider session={session}>
       <WagmiProvider>
-        <RainbowKitProvider modalSize='compact' locale='en-US'>
+        <RainbowKitProvider locale='en-US'>
           {children}
         </RainbowKitProvider>
       </WagmiProvider>

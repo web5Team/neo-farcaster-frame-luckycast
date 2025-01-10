@@ -53,7 +53,7 @@ import { neoX } from './Neox'
 // })
 
 export const config = getDefaultConfig({
-  appName: 'RainbowKit demo',
+  appName: 'luckycast',
   projectId: '9ae9e04b154850d9edb3b5efe96ae2f2',
   chains: [
     mainnet,
