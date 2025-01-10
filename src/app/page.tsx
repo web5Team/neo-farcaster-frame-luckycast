@@ -3,7 +3,7 @@ import App from './app'
 
 const frame = {
   version: 'next',
-  imageUrl: 'https://pic1.imgdb.cn/item/6773988bd0e0a243d4ed04cc.png',
+  imageUrl: 'https://pic1.imgdb.cn/item/6780cb98d0e0a243d4f2fda7.png',
   button: {
     title: 'LuckyCast',
     action: {
@@ -11,10 +11,10 @@ const frame = {
       name: 'LuckyCast',
       url:
         process.env.NODE_ENV === 'development'
-          ? 'https://pagedev.tagzxia.com/'
-          : 'https://www.luckycast.xyz/',
-      splashImageUrl: `https://frames-v2.vercel.app/splash.png`,
-      splashBackgroundColor: '#f7f7f7',
+          ? 'https://9885-89-185-31-210.ngrok-free.app'
+          : 'https://wrapcast-frame.vercel.app/',
+      splashImageUrl: `https://pic1.imgdb.cn/item/6780cb95d0e0a243d4f2fda4.png`,
+      splashBackgroundColor: '#f2fded',
     },
   },
 }

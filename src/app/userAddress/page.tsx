@@ -33,19 +33,26 @@ export default function UserAddress() {
   const [teamCode, setTeamCode] = useState('')
   const [verify, setVerify] = useState(false)
   const [done, setDone] = useState(false)
-  const [userInfo, setUserInfo] = useState({ picUrl: '', displayName: '', fid: -1, username: '' })
+  const [userInfo, setUserInfo] = useState({
+    picUrl: '',
+    displayName: '',
+    fid: -1,
+    username: '',
+  })
   const [messageApi, contextHolder] = message.useMessage()
   const { mutateAsync: SumbitData } = useSumbitDataMutation()
-  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(disposition.first.verifyUrl)
+  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(
+    disposition.first.verifyUrl
+  )
 
   async function trySignIn() {
-    const nonce = [...((address?.substring(0, 8) || '') + Date.now())].reverse().join('')
+    const nonce = [...((address?.substring(0, 8) || '') + Date.now())]
+      .reverse()
+      .join('')
 
     try {
-
       const res = await sdk.actions.signIn({ nonce })
-      console.log("context", res)
-
+      console.log('context', res)
     } catch (e) {
       messageApi.warning('Please signin to continue')
 
@@ -58,7 +65,7 @@ export default function UserAddress() {
   useEffect(() => {
     if (isConnected) {
       messageApi.success('Connected')
-      console.log(`钱包已连接，地址：${address}`);
+      console.log(`钱包已连接，地址：${address}`)
 
       setTimeout(async () => {
         const res = (await sdk.context).user
@@ -73,36 +80,34 @@ export default function UserAddress() {
         } else {
           trySignIn()
         }
-
       })
     } else {
       messageApi.error('Please connect your wallet first.')
       router.push('/')
     }
-  }, [isConnected, address]);
+  }, [isConnected, address])
 
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
 
-      VerifyTranspond({ fid: context?.user.fid + '' }).then(
-        () => {
-          setVerify(true)
+      VerifyTranspond({ fid: context?.user.fid + '' }).then(() => {
+        setVerify(true)
 
-          SumbitData({
-            fid: context?.user.fid + '',
-            nickname: context?.user.username || '',
-            email: '',
-            address: address + '',
-            team_code: teamCode.trim(),
-          }).then((res) => {
-            if (res.code === 1) {
-              setDone(true)
-            } else if (res.msg == 'The current data has been submitted') {
-              setDone(true)
-            }
-          })
+        SumbitData({
+          fid: context?.user.fid + '',
+          nickname: context?.user.username || '',
+          email: '',
+          address: address + '',
+          team_code: teamCode.trim(),
+        }).then((res) => {
+          if (res.code === 1) {
+            setDone(true)
+          } else if (res.msg == 'The current data has been submitted') {
+            setDone(true)
+          }
         })
+      })
     }
     load()
   }, [])
@@ -189,7 +194,7 @@ export default function UserAddress() {
 
   return (
     <>
-      <Common className='bg-[#EFFDEC]' src={banner.src}>
+      <Common className="bg-[#EFFDEC]" src={banner.src}>
         <div className="UserPage-Displayer">
           <AccountUrlDisplayer text={address || ''} />
         </div>
@@ -197,17 +202,21 @@ export default function UserAddress() {
           <button>Disconnect</button>
         </div>
 
-        <div className='UserPage-Avatar z-10'>
-          <img src={userInfo.picUrl} alt="Avatar" />
+        <div className="UserPage-Avatar z-10">
+          <img src={avatar.src} alt="Avatar" />
+          <div onClick={()=>router.push('/rank')}>123</div>
         </div>
         <>{contextHolder}</>
 
         <div className="relative bg-[#F7FBFA]  mt-[-25%] page-content pb-6">
-          <div onClick={() => setShowOpen(true)} className="absolute text-sm text-[#999] hover:text-[#7866bb] transition-all right-2 top-2 mt-2 mr-2 cursor-pointer">
+          <div
+            onClick={() => setShowOpen(true)}
+            className="absolute text-sm text-[#999] hover:text-[#7866bb] transition-all right-2 top-2 mt-2 mr-2 cursor-pointer"
+          >
             <img src={help.src} alt="HELP" />
           </div>
 
-          <div className='pt-20 text-[24px] text-black mx-8 font-bold'>
+          <div className="pt-20 text-[24px] text-black mx-8 font-bold">
             <p>@{userInfo.username}</p>
           </div>
 
@@ -228,27 +237,43 @@ export default function UserAddress() {
             <div>this is a help session.</div>
           </Modal> */}
 
-          {done && createPortal((
-            <div className='UserPage-Wait'>
-              <Wait />
-            </div>
-          ), document.body)}
+          {done &&
+            createPortal(
+              <div className="UserPage-Wait">
+                <Wait />
+              </div>,
+              document.body
+            )}
 
-          <InfoDialog emoji="🧐" isOpen={showOpen} onClose={() => setShowOpen(false)}>
-            <div className='text-black my-4 text-center'>
-              <p className='font-bold text-2xl'>HELP?</p>
+          <InfoDialog
+            emoji="🧐"
+            isOpen={showOpen}
+            onClose={() => setShowOpen(false)}
+          >
+            <div className="text-black my-4 text-center">
+              <p className="font-bold text-2xl">HELP?</p>
               <ul className="list-disc list-inside text-left text-[#868686]">
                 <li>
-                  <span className='-ml-2'>Recast first, then submit your information to claim the airdrop.</span>
+                  <span className="-ml-2">
+                    Recast first, then submit your information to claim the
+                    airdrop.
+                  </span>
                 </li>
                 <li>
-                  <span className='-ml-2'>Join a KOL team using a code to get a multiplier bonus.</span>
+                  <span className="-ml-2">
+                    Join a KOL team using a code to get a multiplier bonus.
+                  </span>
                 </li>
                 <li>
-                  <span className='-ml-2'>Each FID can only be bound to one valid address to receive airdrops.</span>
+                  <span className="-ml-2">
+                    Each FID can only be bound to one valid address to receive
+                    airdrops.
+                  </span>
                 </li>
                 <li>
-                  <span className='-ml-2'>Stay tuned for more airdrops from Neo in the future.</span>
+                  <span className="-ml-2">
+                    Stay tuned for more airdrops from Neo in the future.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -263,15 +288,21 @@ export default function UserAddress() {
             style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
             className={'text-white'}
           >
-            <div className='flex items-center justify-center gap-2'>
-              {verify && (<img src={circleCheck.src} alt="check" />)} Recast
+            <div className="flex items-center justify-center gap-2">
+              {verify && <img src={circleCheck.src} alt="check" />} Recast
             </div>
           </Button>
           <Button
-            style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }} className='' isLoading={loading.sumbitLoading} onClick={sumbit}>
+            style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
+            className=""
+            isLoading={loading.sumbitLoading}
+            onClick={sumbit}
+          >
             Sumbit
           </Button>
-          <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>
+          <p className="font-[12px] text-[#9E9E9E]">
+            You have to recast first.
+          </p>
         </div>
       </Common>
     </>

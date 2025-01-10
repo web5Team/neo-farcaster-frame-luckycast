@@ -72,10 +72,12 @@ export default function Congratulations() {
   const sumbit = () => {
     if (!verify) {
       messageApi.warning('Please Recast')
-    } else if (rewardData?.status !== 2) {
+    } else if (rewardData?.status == 3) {
       messageApi.info('To be reviewed')
       return
-    } else {
+    } else if (rewardData?.status == 4) {
+      router.push('/rank')
+    } else if (rewardData?.status === 2) {
       if (context && context?.user.fid) {
         Receive({
           fid: context?.user.fid + '',
@@ -107,7 +109,9 @@ export default function Congratulations() {
       <>{contextHolder}</>
       <div className="px-6 py-4 flex flex-col justify-between">
         <div>
-          <div className="text-2xl text-black in text-center font-bold">Congratulations</div>
+          <div className="text-2xl text-black in text-center font-bold">
+            Congratulations
+          </div>
           {rewardData && (
             <div className="text-center font-size-[12px] my-2 text-[#999] text-sm">
               <p>You&apos;ve earned</p>
@@ -123,16 +127,22 @@ export default function Congratulations() {
             onClick={recast}
             isDefault={true}
             style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
-            className='text-white'
+            className="text-white"
           >
-            <div className='flex items-center justify-center gap-2'>
-              {verify && (<img src={circleCheck.src} alt="check" />)} Recast
+            <div className="flex items-center justify-center gap-2">
+              {verify && <img src={circleCheck.src} alt="check" />} Recast
             </div>
           </Button>
-          <Button style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }} isLoading={loading.sumbitLoading} onClick={sumbit}>
+          <Button
+            style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
+            isLoading={loading.sumbitLoading}
+            onClick={sumbit}
+          >
             Claim
           </Button>
-          <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>
+          <p className="font-[12px] text-[#9E9E9E]">
+            You have to recast first.
+          </p>
         </div>
         {rewardData?.status === 3 && (
           <div className="text-xs font-bold text-center text-[#999] mt-3">
