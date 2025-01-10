@@ -11,7 +11,7 @@ import {
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { TRank, TReward } from '@/composables/api/models'
 import { useRouter } from 'next/navigation'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
 import InfoDialog from '@/components/ui/InfoDialog'
 import help from '@/image/HELP_.png'
@@ -27,6 +27,7 @@ export default function Rank() {
   const [userInfo, setUserInfo] = useState({ picUrl: '', displayName: '', fid: -1, username: '' })
 
   const [showOpen, setShowOpen] = useState(false)
+    const { disconnect } = useDisconnect()
 
   const getRankList = () => {
     FarcasterRank({ fid: context?.user.fid + '' || '' }).then((res) => {
@@ -80,6 +81,9 @@ export default function Rank() {
     <Common src={banner.src} className="">
       <div className="UserPage-Displayer">
         <AccountUrlDisplayer text={address || ''} />
+      </div>
+      <div onClick={() => disconnect()} className="UserPage-Disconnection">
+        <button>Disconnect</button>
       </div>
 
       <div className='UserPage-Avatar z-10'>

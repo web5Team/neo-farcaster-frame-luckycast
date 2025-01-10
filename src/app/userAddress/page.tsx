@@ -3,7 +3,7 @@
 import React from 'react'
 // import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { Input, message } from 'antd'
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
@@ -28,6 +28,7 @@ export default function UserAddress() {
   const router = useRouter()
   const { isConnected, address } = useAccount()
   const [context, setContext] = useState<FrameContext>()
+  const { disconnect } = useDisconnect()
 
   const [teamCode, setTeamCode] = useState('')
   const [verify, setVerify] = useState(false)
@@ -172,6 +173,9 @@ export default function UserAddress() {
       <Common className='bg-[#EFFDEC]' src={banner.src}>
         <div className="UserPage-Displayer">
           <AccountUrlDisplayer text={address || ''} />
+        </div>
+        <div onClick={() => disconnect()} className="UserPage-Disconnection">
+          <button>Disconnect</button>
         </div>
 
         <div className='UserPage-Avatar z-10'>
