@@ -53,11 +53,11 @@ export function useReceiveMutation() {
   })
 }
 
-export function useVerifyTranspondMutation(verifyUrl: string) {
+export function useVerifyTranspondMutation(verifyUrl?: string) {
   return useMutation({
     mutationKey: ['verifyTranspond'],
     mutationFn: (query: { fid: string }) =>
-      client<{ message: string }>(disposition.first.verifyUrl, {
+      client<{ message: string }>(verifyUrl || disposition.first.verifyUrl, {
         method: 'POST',
         query,
       }),

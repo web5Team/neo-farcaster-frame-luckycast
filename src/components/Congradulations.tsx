@@ -20,18 +20,25 @@ export default function Congratulations() {
   const [context, setContext] = useState<FrameContext>()
   const { mutateAsync: GetReward } = useGetRewardMutation()
   const { mutateAsync: Receive } = useReceiveMutation()
-  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(disposition.second.verifyUrl)
+  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(
+    disposition.second.verifyUrl
+  )
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
       // console.log(context)
 
-      VerifyTranspond({ fid: (await sdk.context).user.fid + '' }).then((res) => {
-        if (res.message == 'Cast OK') {
-          setVerify(true)
-          messageApi.success('Recast Successfully')
+      VerifyTranspond({ fid: (await sdk.context).user.fid + '' }).then(
+        (res) => {
+          if (res.message == 'Cast OK') {
+            setVerify(true)
+            messageApi.success('Recast Successfully')
+          }
+        },
+        () => {
+          sdk.actions.openUrl(disposition.second.openUrl)
         }
-      })
+      )
     }
     load()
   }, [])
@@ -72,16 +79,24 @@ export default function Congratulations() {
   const sumbit = () => {
     if (!verify) {
       messageApi.warning('Please Recast')
-    } else if (rewardData?.status == 3) {
+    } else if (rewardData?.status == 1) {
       messageApi.info('To be reviewed')
       return
-    } else if (rewardData?.status == 4) {
+    } else if (rewardData?.status == 3) {
       router.push('/rank')
     } else if (rewardData?.status === 2) {
       if (context && context?.user.fid) {
+        setLoading({
+          ...loading,
+          sumbitLoading: true,
+        })
         Receive({
           fid: context?.user.fid + '',
         }).then((res) => {
+          setLoading({
+            ...loading,
+            sumbitLoading: false,
+          })
           if (res.code === 1) {
             messageApi.open({
               type: 'success',
