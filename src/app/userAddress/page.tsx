@@ -241,7 +241,7 @@ export default function UserAddress() {
             isLoading={loading.recastLoading}
             isDefault={true}
             onClick={recast}
-            className='bg-[#DCC1FE] text-white'
+            className={(verify ? 'bg-[#E3D4F6]' : 'bg-[#DCC1FE]') + ' text-white'}
           >
             <div className='flex items-center justify-center gap-2'>
               {verify && (<img src={circleCheck.src} alt="check" />)} Recast
