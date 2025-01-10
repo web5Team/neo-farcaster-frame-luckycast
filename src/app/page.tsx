@@ -12,7 +12,7 @@ const frame = {
       url:
         process.env.NODE_ENV === 'development'
           ? 'https://9885-89-185-31-210.ngrok-free.app'
-          : 'https://wrapcast-frame.vercel.app/',
+          : 'https://www.luckycast.xyz/',
       splashImageUrl: `https://pic1.imgdb.cn/item/6780cb95d0e0a243d4f2fda4.png`,
       splashBackgroundColor: '#f2fded',
     },
