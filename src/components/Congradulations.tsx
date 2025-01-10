@@ -115,13 +115,14 @@ export default function Congratulations() {
             isLoading={loading.recastLoading}
             onClick={recast}
             isDefault={true}
-            className='bg-[#DCC1FE] text-white'
+            style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
+            className='text-white'
           >
             <div className='flex items-center justify-center gap-2'>
               {verify && (<img src={circleCheck.src} alt="check" />)} Recast
             </div>
           </Button>
-          <Button className='bg-[#A0A0A0]' isLoading={loading.sumbitLoading} onClick={sumbit}>
+          <Button style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }} isLoading={loading.sumbitLoading} onClick={sumbit}>
             Claim
           </Button>
           <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>

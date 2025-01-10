@@ -84,6 +84,25 @@ export default function UserAddress() {
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
+
+      VerifyTranspond({ fid: context?.user.fid + '' }).then(
+        () => {
+          setVerify(true)
+
+          SumbitData({
+            fid: context?.user.fid + '',
+            nickname: context?.user.username || '',
+            email: '',
+            address: address + '',
+            team_code: teamCode.trim(),
+          }).then((res) => {
+            if (res.code === 1) {
+              setDone(true)
+            } else if (res.msg == 'The current data has been submitted') {
+              setDone(true)
+            }
+          })
+        })
     }
     load()
   }, [])
@@ -224,13 +243,13 @@ export default function UserAddress() {
                 </li>
                 <li>
                   <span className='-ml-2'>Join a KOL team using a code to get a multiplier bonus.</span>
-                  </li>
+                </li>
                 <li>
                   <span className='-ml-2'>Each FID can only be bound to one valid address to receive airdrops.</span>
-                  </li>
+                </li>
                 <li>
                   <span className='-ml-2'>Stay tuned for more airdrops from Neo in the future.</span>
-                  </li>
+                </li>
               </ul>
             </div>
           </InfoDialog>
