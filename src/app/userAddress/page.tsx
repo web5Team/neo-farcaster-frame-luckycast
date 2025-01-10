@@ -36,7 +36,7 @@ export default function UserAddress() {
   const [userInfo, setUserInfo] = useState({ picUrl: '', displayName: '', fid: -1, username: '' })
   const [messageApi, contextHolder] = message.useMessage()
   const { mutateAsync: SumbitData } = useSumbitDataMutation()
-  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation()
+  const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(disposition.first.verifyUrl)
 
   async function trySignIn() {
     const nonce = [...((address?.substring(0, 8) || '') + Date.now())].reverse().join('')
@@ -112,7 +112,7 @@ export default function UserAddress() {
             ...loading,
             recastLoading: false,
           })
-          sdk.actions.openUrl(disposition.openUrl)
+          sdk.actions.openUrl(disposition.first.openUrl)
         }
       )
     }
@@ -241,13 +241,15 @@ export default function UserAddress() {
             isLoading={loading.recastLoading}
             isDefault={true}
             onClick={recast}
-            className={(verify ? 'bg-[#E3D4F6]' : 'bg-[#DCC1FE]') + ' text-white'}
+            style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
+            className={'text-white'}
           >
             <div className='flex items-center justify-center gap-2'>
               {verify && (<img src={circleCheck.src} alt="check" />)} Recast
             </div>
           </Button>
-          <Button className='bg-[#A0A0A0]' isLoading={loading.sumbitLoading} onClick={sumbit}>
+          <Button
+            style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }} className='' isLoading={loading.sumbitLoading} onClick={sumbit}>
             Sumbit
           </Button>
           <p className='font-[12px] text-[#9E9E9E]'>You have to recast first.</p>
