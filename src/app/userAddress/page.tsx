@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useRef } from 'react'
 // import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { useEffect, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
@@ -23,6 +23,7 @@ import './user-style.css'
 import InfoDialog from '@/components/ui/InfoDialog'
 import Wait from '../../components/WaitAirDrop'
 import { createPortal } from 'react-dom'
+import { useOnClickOutside } from 'usehooks-ts'
 
 export default function UserAddress() {
   const router = useRouter()
@@ -190,15 +191,23 @@ export default function UserAddress() {
       })
     }
   }
+
+  const wrapperRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClickOutside = () => {
+    setIsVisible(false)
+  };
+  useOnClickOutside(wrapperRef, handleClickOutside);
   const [showOpen, setShowOpen] = useState(false)
 
   return (
     <>
       <Common className="bg-[#EFFDEC]" src={banner.src}>
-        <div className="UserPage-Displayer">
+        <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
           <AccountUrlDisplayer text={address || ''} />
         </div>
-        <div onClick={() => disconnect()} className="UserPage-Disconnection">
+        <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none'}} onClick={() => disconnect()} className="UserPage-Disconnection">
           <button>Disconnect</button>
         </div>
 

@@ -3,13 +3,15 @@ import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/navigation'
 import { useGetRewardMutation } from '@/composables/api'
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
 import AccountUrlDisplayer from './ui/AccountUrlDisplayer'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import './WaitAirDrop.css'
 import Congratulations from './Congradulations'
 import InfoDialog from './ui/InfoDialog'
+import { useOnClickOutside } from 'usehooks-ts'
+import { createPortal } from 'react-dom'
 
 export default function Wait() {
   const router = useRouter()
@@ -40,14 +42,29 @@ export default function Wait() {
       }
     })
   }
+
+  const { disconnect } = useDisconnect()
+  const wrapperRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleClickOutside = () => {
+    setIsVisible(false)
+  };
+  useOnClickOutside(wrapperRef, handleClickOutside);
+
   return (
     <>
       <>{contextHolder}</>
-      {!claim && (
-        <div className="WaitPage-Displayer">
-          <AccountUrlDisplayer text={address || ''} />
+      {!claim && createPortal((
+        <div className='WaitPage-Header'>
+          <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
+            <AccountUrlDisplayer text={address || ''} />
+          </div>
+          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection z-1">
+            <button>Disconnect</button>
+          </div>
         </div>
-      )}
+      ), document.body)}
 
       <InfoDialog isOpen={true} emoji="🤩" onClose={() => void 0} className={'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' + (claim ? ' hidden' : '')}>
         <div className='text-center'>
