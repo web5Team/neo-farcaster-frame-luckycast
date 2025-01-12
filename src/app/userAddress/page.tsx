@@ -193,7 +193,7 @@ export default function UserAddress() {
   }
 
   const wrapperRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClickOutside = () => {
     setIsVisible(false)

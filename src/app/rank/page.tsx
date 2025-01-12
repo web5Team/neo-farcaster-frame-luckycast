@@ -4,7 +4,7 @@ import banner from '@/image/BgHeader.png'
 import avatar from '@/image/avatar.png'
 import avatar2 from '@/image/avatar-2.png'
 import './index.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   useFarcasterRankMutation,
   useGetRewardMutation,
@@ -12,12 +12,13 @@ import {
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { TRank, TReward } from '@/composables/api/models'
 import { useRouter } from 'next/navigation'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
 import InfoDialog from '@/components/ui/InfoDialog'
 import help from '@/image/HELP_.png'
 import stroke from '@/image/stroke.svg'
 import rankNum from '@/image/rankNum.png'
+import { useOnClickOutside } from 'usehooks-ts'
 
 export default function Rank() {
   const router = useRouter()
@@ -83,10 +84,22 @@ export default function Rank() {
     }
   }, [isConnected, address])
 
+  const wrapperRef = useRef(null);
+  const { disconnect } = useDisconnect()
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleClickOutside = () => {
+    setIsVisible(false)
+  };
+  useOnClickOutside(wrapperRef, handleClickOutside);
+
   return (
     <Common src={banner.src} className="">
-      <div className="UserPage-Displayer">
+      <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
         <AccountUrlDisplayer text={address || ''} />
+      </div>
+      <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection">
+        <button>Disconnect</button>
       </div>
 
       <div className="UserPage-Avatar z-10">
