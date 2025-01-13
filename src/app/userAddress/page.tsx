@@ -198,6 +198,7 @@ export default function UserAddress() {
   const handleClickOutside = () => {
     setIsVisible(false)
   };
+  // @ts-expect-error nextline
   useOnClickOutside(wrapperRef, handleClickOutside);
   const [showOpen, setShowOpen] = useState(false)
 

@@ -91,7 +91,8 @@ export default function Rank() {
   const handleClickOutside = () => {
     setIsVisible(false)
   };
-  useOnClickOutside(wrapperRef, handleClickOutside);
+  // @ts-expect-error nextline
+  useOnClickOutside([wrapperRef], handleClickOutside);
 
   return (
     <Common src={banner.src} className="">

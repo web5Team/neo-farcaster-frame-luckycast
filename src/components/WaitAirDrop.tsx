@@ -50,6 +50,7 @@ export default function Wait() {
   const handleClickOutside = () => {
     setIsVisible(false)
   };
+  // @ts-expect-error nextline
   useOnClickOutside(wrapperRef, handleClickOutside);
 
   return (
