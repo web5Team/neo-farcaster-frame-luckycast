@@ -4,7 +4,8 @@ import React, { useRef } from 'react'
 // import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { useEffect, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
-import { Input, message } from 'antd'
+import { Input, message, Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
 import { Button } from '@/components/ui/Button'
@@ -98,14 +99,20 @@ export default function UserAddress() {
         } else if (res.msg == 'The current data has been submitted') {
           setDone(true)
         }
+
+        setTimeout(() => {
+          setGlobalLoading(false)
+        }, 100)
+      }).catch(() => {
+        setTimeout(() => {
+          setGlobalLoading(false)
+        }, 100)
       })
     })
   }
 
   useEffect(() => {
     if (isConnected) {
-      messageApi.success('Connected')
-      console.log(`钱包已连接，地址：${address}`)
 
       setTimeout(async () => {
         handleSigned()
@@ -123,6 +130,7 @@ export default function UserAddress() {
     load()
   }, [])
 
+  const [globalLoading, setGlobalLoading] = useState(true)
   const [loading, setLoading] = useState({
     recastLoading: false,
     sumbitLoading: false,
@@ -346,6 +354,15 @@ export default function UserAddress() {
             You have to recast first.
           </p>
         </div>
+
+        {
+          createPortal((
+            <div className='transition-all absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white' style={{ zIndex: '1000', opacity: globalLoading ? '1' : '0', pointerEvents: globalLoading ? 'none' : 'auto' }}>
+              <Spin indicator={<LoadingOutlined spin />} size="large" />
+            </div>
+          ), document.body)
+        }
+
       </Common>
     </>
   )

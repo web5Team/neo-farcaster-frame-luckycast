@@ -34,7 +34,6 @@ export default function Congratulations() {
         (res) => {
           if (res.message == 'Cast OK') {
             setVerify(true)
-            messageApi.success('Recast Successfully')
           }
         },
         () => {
