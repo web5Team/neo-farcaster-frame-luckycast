@@ -94,6 +94,12 @@ export default function Rank() {
   // @ts-expect-error nextline
   useOnClickOutside([wrapperRef], handleClickOutside);
 
+  useEffect(() => {
+    if (!isConnected) {
+      router.push('/')
+    }
+  }, [isConnected, address])
+
   return (
     <Common src={banner.src} className="">
       <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
@@ -134,6 +140,7 @@ export default function Rank() {
 
         <InfoDialog
           emoji="🧐"
+          closable
           isOpen={showOpen}
           onClose={() => setShowOpen(false)}
         >
@@ -167,8 +174,8 @@ export default function Rank() {
         </InfoDialog>
       </div>
 
-      <div className="bg-[#f2fded] pb-48">
-        <div className="px-6 text-base leading-[30px] pt-6 font-bold">Leaderboard</div>
+      <div className="bg-[#f2fded] text-black pb-48">
+        <div className=" px-6 text-base leading-[30px] pt-6 font-bold">Leaderboard</div>
         <div className="flex flex-col justify-center mt-6 gap-[12px] pb-[40px]">
           {rankList.map((item, index) => (
             <div

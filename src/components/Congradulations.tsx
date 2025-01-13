@@ -17,7 +17,6 @@ export default function Congratulations() {
   const [messageApi, contextHolder] = message.useMessage()
   const router = useRouter()
 
-
   const [recastClicked, setRecastClicked] = useState(false)
   const [rewardData, setRewardData] = useState<TReward>()
   const [context, setContext] = useState<FrameContext>()
