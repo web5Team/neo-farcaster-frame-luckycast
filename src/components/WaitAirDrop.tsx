@@ -17,17 +17,20 @@ export default function Wait() {
   const router = useRouter()
   const { isConnected, address } = useAccount()
   const [loading, setLoading] = useState(false)
-  const [claim, setClaim] = useState(false)
+  const [claim, setClaim] = useState(!false)
   const [context, setContext] = useState<FrameContext>()
   const { mutateAsync: GetReward } = useGetRewardMutation()
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
+      recast()
     }
     load()
   }, [])
+
   const [messageApi, contextHolder] = message.useMessage()
   const recast = () => {
+
     setLoading(true)
     GetReward({ fid: context?.user.fid + '' }).then((res) => {
       setLoading(false)

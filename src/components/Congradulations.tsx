@@ -16,6 +16,9 @@ export default function Congratulations() {
   const [verify, setVerify] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const router = useRouter()
+
+
+  const [recastClicked, setRecastClicked] = useState(false)
   const [rewardData, setRewardData] = useState<TReward>()
   const [context, setContext] = useState<FrameContext>()
   const { mutateAsync: GetReward } = useGetRewardMutation()
@@ -57,6 +60,7 @@ export default function Congratulations() {
     sumbitLoading: false,
   })
   const recast = async () => {
+
     if (context && context?.user.fid) {
       setLoading({
         ...loading,
@@ -71,6 +75,8 @@ export default function Congratulations() {
           setVerify(true)
           messageApi.success('Recast Successfully')
         } else {
+
+          setRecastClicked(true)
           sdk.actions.openUrl(disposition.second.openUrl)
         }
       })
@@ -145,7 +151,16 @@ export default function Congratulations() {
             className="text-white"
           >
             <div className="flex items-center justify-center gap-2">
-              {verify && <img src={circleCheck.src} alt="check" />} Recast
+              {recastClicked && (
+                <span>Refresh</span>
+              )}
+              {
+                !recastClicked && (
+                  <>
+                    {verify && <img src={circleCheck.src} alt="check" />} Recast
+                  </>
+                )
+              }
             </div>
           </Button>
           <Button
@@ -155,7 +170,7 @@ export default function Congratulations() {
           >
             Claim
           </Button>
-          <p className="font-[12px] text-[#9E9E9E]">
+          <p className="-mt-4 font-[12px] text-[#9E9E9E]">
             You have to recast first.
           </p>
         </div>
