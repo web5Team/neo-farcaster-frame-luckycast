@@ -128,8 +128,11 @@ export default function UserAddress() {
     sumbitLoading: false,
   })
   const [recastClicked, setRecastClicked] = useState(false)
+  let lastClickTime = -1
   const recast = async () => {
     if (context && context?.user.fid) {
+
+
       setLoading({
         ...loading,
         recastLoading: true,
@@ -162,6 +165,14 @@ export default function UserAddress() {
       })
       return
     }
+
+    if (Date.now() - lastClickTime <= 10000) {
+      messageApi.warning('Please wait 10 seconds.')
+      return
+    }
+
+    lastClickTime = Date.now()
+
     if (context && context?.user.fid) {
       setLoading({
         ...loading,

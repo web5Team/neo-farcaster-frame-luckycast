@@ -81,6 +81,9 @@ export default function Congratulations() {
       })
     }
   }
+
+  let lastClickTime = -1
+
   const sumbit = () => {
     if (!verify) {
       messageApi.warning('Please Recast')
@@ -90,6 +93,13 @@ export default function Congratulations() {
     } else if (rewardData?.status == 3) {
       router.push('/rank')
     } else if (rewardData?.status === 2) {
+      if (Date.now() - lastClickTime <= 10000) {
+        messageApi.warning('Please wait 10 seconds.')
+        return
+      }
+
+      lastClickTime = Date.now()
+
       if (context && context?.user.fid) {
         setLoading({
           ...loading,
