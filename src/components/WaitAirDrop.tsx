@@ -69,8 +69,8 @@ export default function Wait() {
 
       <InfoDialog isOpen={true} emoji="🤩" onClose={() => void 0} className={'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' + (claim ? ' hidden' : '')}>
         <div className='text-center'>
-          <h1 className='text-3xl font-bold'>Great!</h1>
-          <p className='max-w-[85%] my-2 font-[12px] text-[#C7C7C7]'>You have successfully submitted and are awaiting confirmation.</p>
+          <h1 className='text-3xl text-black font-bold'>Great!</h1>
+          <p className='my-2 font-[12px] text-[#C7C7C7]'>You have successfully submitted and are awaiting confirmation.</p>
           {/* <Spin className='text-base font-bold' tip="wait..."></Spin> */}
           <Button
             isLoading={loading}

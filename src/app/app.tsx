@@ -32,7 +32,7 @@ export default function App() {
       </div>
       <div className="AppPage-Main relative bg-[#EFFDEC] h-full flex justify-end items-center flex-col py-24">
         <div className='AppPage-Connection'>
-          <ConnectButton label='Connect Wallet'></ConnectButton>
+          <ConnectButton></ConnectButton>
         </div>
         {/* <WalletButton wallet="rainbow" /> */}
       </div>

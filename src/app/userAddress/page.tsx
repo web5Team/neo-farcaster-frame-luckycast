@@ -54,6 +54,8 @@ export default function UserAddress() {
     try {
       const res = await sdk.actions.signIn({ nonce })
       console.log('context', res)
+
+      handleSigned()
     } catch (e) {
       messageApi.warning('Please signin to continue')
 
@@ -63,24 +65,50 @@ export default function UserAddress() {
     }
   }
 
+  async function handleSigned() {
+    const res = (await sdk.context).user
+
+    if (!res.username) {
+      trySignIn()
+      return
+    }
+
+    setUserInfo({
+      fid: res.fid,
+      username: res.username,
+      displayName: res.displayName || '',
+      picUrl: res.pfpUrl || avatar.src,
+    })
+
+    console.log('ready to verify')
+
+    VerifyTranspond({ fid: res.fid + '' }).then(() => {
+      console.log('VerifyTranspond')
+      setVerify(true)
+
+      SumbitData({
+        fid: res.fid + '',
+        nickname: res.username || '',
+        email: '',
+        address: address + '',
+        team_code: teamCode.trim(),
+      }).then((res) => {
+        if (res.code === 1) {
+          setDone(true)
+        } else if (res.msg == 'The current data has been submitted') {
+          setDone(true)
+        }
+      })
+    })
+  }
+
   useEffect(() => {
     if (isConnected) {
       messageApi.success('Connected')
       console.log(`钱包已连接，地址：${address}`)
 
       setTimeout(async () => {
-        const res = (await sdk.context).user
-
-        if (res.username) {
-          setUserInfo({
-            fid: res.fid,
-            username: res.username,
-            displayName: res.displayName || '',
-            picUrl: res.pfpUrl || avatar.src,
-          })
-        } else {
-          trySignIn()
-        }
+        handleSigned()
       })
     } else {
       messageApi.error('Please connect your wallet first.')
@@ -91,24 +119,6 @@ export default function UserAddress() {
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
-
-      VerifyTranspond({ fid: context?.user.fid + '' }).then(() => {
-        setVerify(true)
-
-        SumbitData({
-          fid: context?.user.fid + '',
-          nickname: context?.user.username || '',
-          email: '',
-          address: address + '',
-          team_code: teamCode.trim(),
-        }).then((res) => {
-          if (res.code === 1) {
-            setDone(true)
-          } else if (res.msg == 'The current data has been submitted') {
-            setDone(true)
-          }
-        })
-      })
     }
     load()
   }, [])
@@ -117,6 +127,7 @@ export default function UserAddress() {
     recastLoading: false,
     sumbitLoading: false,
   })
+  const [recastClicked, setRecastClicked] = useState(false)
   const recast = async () => {
     if (context && context?.user.fid) {
       setLoading({
@@ -137,6 +148,7 @@ export default function UserAddress() {
             ...loading,
             recastLoading: false,
           })
+          setRecastClicked(true)
           sdk.actions.openUrl(disposition.first.openUrl)
         }
       )
@@ -208,7 +220,7 @@ export default function UserAddress() {
         <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
           <AccountUrlDisplayer text={address || ''} />
         </div>
-        <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none'}} onClick={() => disconnect()} className="UserPage-Disconnection">
+        <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection">
           <button>Disconnect</button>
         </div>
 
@@ -256,6 +268,7 @@ export default function UserAddress() {
 
           <InfoDialog
             emoji="🧐"
+            closable
             isOpen={showOpen}
             onClose={() => setShowOpen(false)}
           >
@@ -298,7 +311,16 @@ export default function UserAddress() {
             className={'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
-              {verify && <img src={circleCheck.src} alt="check" />} Recast
+              {recastClicked && (
+                <span>Refresh</span>
+              )}
+              {
+                !recastClicked && (
+                  <>
+                    {verify && <img src={circleCheck.src} alt="check" />} Recast
+                  </>
+                )
+              }
             </div>
           </Button>
           <Button
@@ -307,9 +329,9 @@ export default function UserAddress() {
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
           >
-            Sumbit
+            Submit
           </Button>
-          <p className="font-[12px] text-[#9E9E9E]">
+          <p className="-mt-4 font-[12px] text-[#9E9E9E]">
             You have to recast first.
           </p>
         </div>

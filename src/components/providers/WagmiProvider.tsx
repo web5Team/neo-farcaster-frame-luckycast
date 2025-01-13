@@ -30,13 +30,13 @@ import { neoX } from './Neox'
 //   }
 // );
 
-// setTimeout(() => {
+// // setTimeout(() => {
  
-//   console.log( WALLETS.safeWallet (), JSON.stringify(window.ethereum.providers))
-// }, 1000)
+// //   console.log( WALLETS.safeWallet (), JSON.stringify(window.ethereum.providers))
+// // }, 1000)
 
 // export const config = createConfig({
-//   chains: [NeoxProvider, mainnet, polygon, optimism, arbitrum, base],
+//   // chains: [NeoxProvider, mainnet, polygon, optimism, arbitrum, base],
 //   transports: {
 //       [NeoxProvider.id]: http(),
 //     [mainnet.id]: http(),
@@ -49,7 +49,7 @@ import { neoX } from './Neox'
 //   connectors,
 //   // appName: 'RainbowKit demo',
 //   // projectId: '9ae9e04b154850d9edb3b5efe96ae2f2',
-//   // chains: [NeoxProvider, mainnet, polygon, optimism, arbitrum, base],
+//   chains: [NeoxProvider, mainnet, polygon, optimism, arbitrum, base],
 // })
 
 export const config = getDefaultConfig({
