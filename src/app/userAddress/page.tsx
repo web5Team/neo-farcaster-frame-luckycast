@@ -362,11 +362,11 @@ export default function UserAddress() {
             className={'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
-              {recastClicked && (
+              {!verify && recastClicked && (
                 <span>Refresh</span>
               )}
               {
-                !recastClicked && (
+                verify || !recastClicked && (
                   <>
                     {verify && <img src={circleCheck.src} alt="check" />} Recast
                   </>
