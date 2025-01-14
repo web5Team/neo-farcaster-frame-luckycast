@@ -35,10 +35,10 @@ export default function Wait() {
             tryRecast()
           }, 1000)
 
-          return 
+          return
         }
 
-        
+
         recast()
       }
 
@@ -51,7 +51,10 @@ export default function Wait() {
   const recast = () => {
 
     setLoading(true)
-    GetReward({ fid: context?.user.fid + '' }).then((res) => {
+    GetReward({
+      fid: context?.user.fid + '',
+      address: address || '',
+    }).then((res) => {
       setLoading(false)
       if (res.code === 1) {
         if (res.data.status === 4) {
