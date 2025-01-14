@@ -14,6 +14,17 @@ export function useFarcasterRankMutation() {
   })
 }
 
+export function useVerifyTeamcode() {
+  return useMutation({
+    mutationKey: ['checkCode'],
+    mutationFn: (body: { team_code: string }) =>
+      client<ApiResult<{ is_check: boolean }>>('/index.php/api/farcaster/checkCode', {
+        method: 'POST',
+        body,
+      }),
+  })
+}
+
 export function useSumbitDataMutation() {
   return useMutation({
     mutationKey: ['sumbit'],

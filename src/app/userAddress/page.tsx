@@ -5,7 +5,7 @@ import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
 import { Input, message, Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
 import { Button } from '@/components/ui/Button'
@@ -14,7 +14,9 @@ import avatar from '@/image/avatar.png'
 import help from '@/image/HELP_.png'
 import circleCheck from '@/image/check circle.svg'
 import {
+  useGetRewardMutation,
   useSumbitDataMutation,
+  useVerifyTeamcode,
   useVerifyTranspondMutation,
 } from '@/composables/api'
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
@@ -46,6 +48,8 @@ export default function UserAddress() {
   const { mutateAsync: VerifyTranspond } = useVerifyTranspondMutation(
     disposition.first.verifyUrl
   )
+  const { mutateAsync: rewardMutation } = useGetRewardMutation()
+  const { mutateAsync: verifyTeamCode } = useVerifyTeamcode()
 
   async function trySignIn() {
     const nonce = [...((address?.substring(0, 8) || '') + Date.now())]
@@ -85,6 +89,19 @@ export default function UserAddress() {
       setGlobalLoading(true)
     }, 100)
     console.log('ready to verify')
+
+    const rewardRes = await rewardMutation({
+      fid: res.fid + '',
+      address: address + '',
+    })
+
+    if (rewardRes.code === 0 && rewardRes.msg === 'reward does not exist') {
+      // new user - no action
+      setTimeout(() => {
+        setGlobalLoading(false)
+      }, 100)
+      return
+    }
 
     VerifyTranspond({ fid: res.fid + '' }).then(() => {
       console.log('VerifyTranspond')
@@ -137,6 +154,8 @@ export default function UserAddress() {
     load()
   }, [])
 
+  const [verifyStatus, setVerifyStatus] = useState(0) // 0 for normal, 1 for true, 2 for failed
+
   const [globalLoading, setGlobalLoading] = useState(false)
   const [loading, setLoading] = useState({
     recastLoading: false,
@@ -145,6 +164,11 @@ export default function UserAddress() {
   const [recastClicked, setRecastClicked] = useState(false)
   let lastClickTime = -1
   const recast = async () => {
+    if (verifyStatus === 2) {
+      messageApi.error('Please input correct team code')
+      return
+    }
+
     if (context && context?.user.fid) {
 
 
@@ -178,6 +202,11 @@ export default function UserAddress() {
         type: 'error',
         content: 'Please Recast',
       })
+      return
+    }
+
+    if (verifyStatus === 2) {
+      messageApi.error('Please input correct team code')
       return
     }
 
@@ -263,6 +292,21 @@ export default function UserAddress() {
     return visible;
   }
 
+  const [verifyCodeLoading, setVerifyCodeLoading] = useState(false)
+  const verifyCode = async () => {
+    if (!teamCode?.length) return
+
+    setVerifyCodeLoading(true)
+
+    const { data } = await verifyTeamCode({
+      team_code: teamCode.trim(),
+    })
+
+    setVerifyCodeLoading(false)
+
+    setVerifyStatus(data.is_check ? 1 : 2)
+  }
+
   useDocumentVisible()
 
   return (
@@ -299,10 +343,27 @@ export default function UserAddress() {
             <Input
               value={teamCode}
               className="w-[150px] rounded-1xl py-2"
-              onChange={(e) => setTeamCode(e.target.value)}
+              style={{ color: verifyStatus === 2 ? '#FF4D4F' : '', border: verifyStatus === 2 ? '1px solid #FF4D4F' : ''}}
+              onChange={(e) => {
+                setTeamCode(e.target.value)
+
+                if (!e.target.value?.length) {
+                  setVerifyStatus(0)
+                }
+              }}
               placeholder="Optional"
               variant="filled"
+              onBlur={verifyCode}
             />
+            {
+              verifyCodeLoading && (<Spin className='mx-2' indicator={<LoadingOutlined spin />} />) 
+            }
+            {
+              verifyStatus === 1 && (<span className='color-[#7EBE71]'><CheckOutlined /></span>)
+            }
+            {
+              verifyStatus === 2 && (<span className='text-[#FF4D4F]'>Unavailable</span>)
+            }
           </div>
 
           {/* <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
@@ -362,11 +423,11 @@ export default function UserAddress() {
             className={'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
-              {!verify && recastClicked && (
+              {(!verify && recastClicked) && (
                 <span>Refresh</span>
               )}
               {
-                verify || !recastClicked && (
+                (verify || !recastClicked) && (
                   <>
                     {verify && <img src={circleCheck.src} alt="check" />} Recast
                   </>

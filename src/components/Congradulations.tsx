@@ -15,6 +15,8 @@ import disposition from '@/composables/disposition'
 import { createPortal } from 'react-dom'
 import { useAccount, useDisconnect } from 'wagmi'
 import AccountUrlDisplayer from './ui/AccountUrlDisplayer'
+import { useOnClickOutside } from 'usehooks-ts'
+
 export default function Congratulations() {
   const [verify, setVerify] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
@@ -33,16 +35,16 @@ export default function Congratulations() {
       setContext(await sdk.context)
       // console.log(context)
 
-      VerifyTranspond({ fid: (await sdk.context).user.fid + '' }).then(
-        (res) => {
-          if (res.message == 'Cast OK') {
-            setVerify(true)
-          }
-        },
-        () => {
-          sdk.actions.openUrl(disposition.second.openUrl)
-        }
-      )
+      // VerifyTranspond({ fid: (await sdk.context).user.fid + '' }).then(
+      //   (res) => {
+      //     if (res.message == 'Cast OK') {
+      //       setVerify(true)
+      //     }
+      //   },
+      //   () => {
+      //     sdk.actions.openUrl(disposition.second.openUrl)
+      //   }
+      // )
     }
     load()
   }, [])
@@ -89,6 +91,8 @@ export default function Congratulations() {
   let lastClickTime = -1
 
   const sumbit = () => {
+    if ( loading.sumbitLoading ) return
+
     if (!verify) {
       messageApi.warning('Please Recast')
     } else if (rewardData?.status == 1) {
@@ -187,11 +191,11 @@ export default function Congratulations() {
             className="text-white"
           >
             <div className="flex items-center justify-center gap-2">
-              {!verify && recastClicked && (
+              {(!verify && recastClicked) && (
                 <span>Refresh</span>
               )}
               {
-                verify || !recastClicked && (
+                (verify || !recastClicked) && (
                   <>
                     {verify && <img src={circleCheck.src} alt="check" />} Recast
                   </>
