@@ -81,6 +81,9 @@ export default function UserAddress() {
       picUrl: res.pfpUrl || avatar.src,
     })
 
+    setTimeout(() => {
+      setGlobalLoading(true)
+    }, 100)
     console.log('ready to verify')
 
     VerifyTranspond({ fid: res.fid + '' }).then(() => {
@@ -108,6 +111,10 @@ export default function UserAddress() {
           setGlobalLoading(false)
         }, 100)
       })
+    }).catch(() => {
+      setTimeout(() => {
+        setGlobalLoading(false)
+      }, 100)
     })
   }
 
@@ -130,7 +137,7 @@ export default function UserAddress() {
     load()
   }, [])
 
-  const [globalLoading, setGlobalLoading] = useState(true)
+  const [globalLoading, setGlobalLoading] = useState(false)
   const [loading, setLoading] = useState({
     recastLoading: false,
     sumbitLoading: false,
