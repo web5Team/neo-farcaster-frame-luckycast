@@ -17,13 +17,32 @@ export default function Wait() {
   const router = useRouter()
   const { isConnected, address } = useAccount()
   const [loading, setLoading] = useState(false)
-  const [claim, setClaim] = useState(!false)
+  const [claim, setClaim] = useState(false)
   const [context, setContext] = useState<FrameContext>()
   const { mutateAsync: GetReward } = useGetRewardMutation()
   useEffect(() => {
     const load = async () => {
       setContext(await sdk.context)
-      recast()
+
+      let amo = 0
+      function tryRecast() {
+        console.log("try verify recast status")
+        if (amo >= 10) return
+
+        if (context?.user.fid === undefined) {
+          setTimeout(() => {
+            amo += 1
+            tryRecast()
+          }, 1000)
+
+          return 
+        }
+
+        
+        recast()
+      }
+
+      tryRecast()
     }
     load()
   }, [])

@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/Button'
 import { message } from 'antd'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import circleCheck from '@/image/check circle.svg'
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import {
@@ -12,6 +12,9 @@ import {
 } from '@/composables/api'
 import { TReward } from '@/composables/api/models'
 import disposition from '@/composables/disposition'
+import { createPortal } from 'react-dom'
+import { useAccount, useDisconnect } from 'wagmi'
+import AccountUrlDisplayer from './ui/AccountUrlDisplayer'
 export default function Congratulations() {
   const [verify, setVerify] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
@@ -133,9 +136,31 @@ export default function Congratulations() {
       }
     }
   }
+
+  const { disconnect } = useDisconnect()
+  const wrapperRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const { isConnected, address } = useAccount()
+  const handleClickOutside = () => {
+    setIsVisible(false)
+  };
+  // @ts-expect-error nextline
+  useOnClickOutside(wrapperRef, handleClickOutside);
+
   return (
     <>
       <>{contextHolder}</>
+      {createPortal((
+        <div className='WaitPage-Header'>
+          <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
+            <AccountUrlDisplayer text={address || ''} />
+          </div>
+          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection z-1">
+            <button>Disconnect</button>
+          </div>
+        </div>
+      ), document.body)}
       <div className="px-6 py-4 flex flex-col justify-between">
         <div>
           <div className="text-2xl text-black in text-center font-bold">

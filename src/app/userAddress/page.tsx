@@ -240,6 +240,31 @@ export default function UserAddress() {
   useOnClickOutside(wrapperRef, handleClickOutside);
   const [showOpen, setShowOpen] = useState(false)
 
+  // a useDocumentVisible hook
+  const useDocumentVisible = () => {
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+      const handler = () => {
+        setVisible(!document.hidden);
+
+        if (visible) {
+          recast()
+        }
+      };
+
+      document.addEventListener('visibilitychange', handler);
+
+      return () => {
+        document.removeEventListener('visibilitychange', handler);
+      };
+    }, []);
+
+    return visible;
+  }
+
+  useDocumentVisible()
+
   return (
     <>
       <Common className="bg-[#EFFDEC]" src={banner.src}>
