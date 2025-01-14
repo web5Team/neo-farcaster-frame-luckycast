@@ -357,7 +357,7 @@ export default function UserAddress() {
 
         {
           createPortal((
-            <div className='transition-all absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white' style={{ zIndex: '1000', opacity: globalLoading ? '1' : '0', pointerEvents: globalLoading ? 'none' : 'auto' }}>
+            <div className='transition-all absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white' style={{ zIndex: '1000', opacity: globalLoading ? '1' : '0', pointerEvents: !globalLoading ? 'none' : 'auto' }}>
               <Spin indicator={<LoadingOutlined spin />} size="large" />
             </div>
           ), document.body)
