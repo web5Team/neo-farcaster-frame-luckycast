@@ -34,7 +34,7 @@ export function useSumbitDataMutation() {
 export function useGetRewardMutation() {
   return useMutation({
     mutationKey: ['getReward'],
-    mutationFn: (body: { fid: string }) =>
+    mutationFn: (body: { fid: string, address: string }) =>
       client<ApiResult<TReward>>('/index.php/api/farcaster/getReward', {
         method: 'POST',
         body,
@@ -45,7 +45,7 @@ export function useGetRewardMutation() {
 export function useReceiveMutation() {
   return useMutation({
     mutationKey: ['receive'],
-    mutationFn: (body: { fid: string }) =>
+    mutationFn: (body: { fid: string, address: string }) =>
       client<ApiResult<string>>('/index.php/api/farcaster/receive', {
         method: 'POST',
         body,

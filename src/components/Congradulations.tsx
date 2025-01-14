@@ -109,6 +109,7 @@ export default function Congratulations() {
         })
         Receive({
           fid: context?.user.fid + '',
+          address: address || '',
         }).then((res) => {
           setLoading({
             ...loading,
@@ -141,7 +142,7 @@ export default function Congratulations() {
   const wrapperRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const { isConnected, address } = useAccount()
+  const { address } = useAccount()
   const handleClickOutside = () => {
     setIsVisible(false)
   };

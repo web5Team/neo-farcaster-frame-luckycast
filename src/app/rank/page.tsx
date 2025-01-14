@@ -45,7 +45,10 @@ export default function Rank() {
     })
   }
   const getReward = () => {
-    GetReward({ fid: context?.user.fid + '' }).then((res) => {
+    GetReward({
+      fid: context?.user.fid + '',
+      address: address || '',
+    }).then((res) => {
       if (res.code === 1) {
         setRewardData(res.data)
       }
