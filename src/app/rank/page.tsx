@@ -12,14 +12,14 @@ import {
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { TRank, TReward } from '@/composables/api/models'
 import { useRouter } from 'next/navigation'
-import { useAccount, useDisconnect,useBalance } from 'wagmi'
+import { useAccount, useDisconnect, useBalance } from 'wagmi'
 import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
 import InfoDialog from '@/components/ui/InfoDialog'
 import help from '@/image/HELP_.png'
 import stroke from '@/image/stroke.svg'
 import rankNum from '@/image/rankNum.png'
 import { useOnClickOutside } from 'usehooks-ts'
-import { NeoxProvider } from '@/components/providers/NeoxProvider';
+import { NeoxProvider } from '@/components/providers/NeoxProvider'
 
 export default function Rank() {
   const router = useRouter()
@@ -28,10 +28,11 @@ export default function Rank() {
   const [rewardData, setRewardData] = useState<TReward>()
   const { mutateAsync: FarcasterRank } = useFarcasterRankMutation()
   const { mutateAsync: GetReward } = useGetRewardMutation()
-  const { isConnected, address } = useAccount(),{data:userBalance} = useBalance({
-    address,
-    chainId:NeoxProvider.id
-  })
+  const { isConnected, address } = useAccount(),
+    { data: userBalance } = useBalance({
+      address,
+      chainId: NeoxProvider.id,
+    })
   console.log(userBalance)
   const [userInfo, setUserInfo] = useState({
     picUrl: '',
@@ -92,15 +93,15 @@ export default function Rank() {
     }
   }, [isConnected, address])
 
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef(null)
   const { disconnect } = useDisconnect()
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleClickOutside = () => {
     setIsVisible(false)
-  };
+  }
   // @ts-expect-error nextline
-  useOnClickOutside([wrapperRef], handleClickOutside);
+  useOnClickOutside([wrapperRef], handleClickOutside)
 
   useEffect(() => {
     if (!isConnected) {
@@ -113,7 +114,12 @@ export default function Rank() {
       <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
         <AccountUrlDisplayer text={address || ''} />
       </div>
-      <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection">
+      <div
+        ref={wrapperRef}
+        style={{ display: isVisible ? '' : 'none' }}
+        onClick={() => disconnect()}
+        className="UserPage-Disconnection"
+      >
         <button>Disconnect</button>
       </div>
 
@@ -133,7 +139,7 @@ export default function Rank() {
           <p className="text-[28px]">@{userInfo.username}</p>
           <div className="flex flex-col gap-2">
             <div className="text-xl font-bold  leading-[30px]">
-              {userBalance?.formatted} GAS
+              {rewardData?.money} GAS
             </div>
             <div className="text-sm text-[#686a6c] flex gap-1 items-center">
               <img src={stroke.src} className="w-3 h-3" alt="" />
@@ -183,26 +189,34 @@ export default function Rank() {
       </div>
 
       <div className="bg-[#f2fded] text-black pb-48">
-        <div className=" px-6 text-base leading-[30px] pt-6 font-bold">Leaderboard</div>
+        <div className=" px-6 text-base leading-[30px] pt-6 font-bold">
+          Leaderboard
+        </div>
         <div className="flex flex-col justify-center mt-6 gap-[12px] pb-[40px]">
           {rankList.map((item, index) => (
             <div
               key={index}
               className={`p-6 flex items-center gap-6 border-b border-[#e1e2e2]`}
             >
-              <div className={`w-10 h-10 relative rank flex justify-center items-center font-[bold]`}>
-                <span className=' relative z-10 text-base font-bold'>{index + 1}</span>
-                <img src={rankNum.src} className='w-[58px] h-[58px] max-w-none absolute z-0 left-1/2 top-1/2 -translate-x-1/2 -translate-y-[35%]' alt="" />
+              <div
+                className={`w-10 h-10 relative rank flex justify-center items-center font-[bold]`}
+              >
+                <span className=" relative z-10 text-base font-bold">
+                  {index + 1}
+                </span>
+                <img
+                  src={rankNum.src}
+                  className="w-[58px] h-[58px] max-w-none absolute z-0 left-1/2 top-1/2 -translate-x-1/2 -translate-y-[35%]"
+                  alt=""
+                />
               </div>
               <div className={`flex items-center gap-4`}>
-                <img src={avatar2.src} className='w-20 h-20' alt="" />
-                <div className='flex flex-col gap-1'>
-                  <div className="text-2xl font-bold ">
-                    {item.name}
-                  </div>
+                <img src={avatar2.src} className="w-20 h-20" alt="" />
+                <div className="flex flex-col gap-1">
+                  <div className="text-2xl font-bold ">{item.name}</div>
                   <div className="text-base font-bold">
-                    <span className='text-[#686a6c]'>Total earn </span>
-                    <span className='ml-1'> {item.number} GAS</span>
+                    <span className="text-[#686a6c]">Total earn </span>
+                    <span className="ml-1"> {item.number} GAS</span>
                   </div>
                 </div>
               </div>
