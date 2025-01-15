@@ -422,8 +422,8 @@ export default function UserAddress() {
             isLoading={loading.recastLoading}
             isDefault={true}
             onClick={recast}
-            style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
-            className={'text-white'}
+            style={{ backgroundColor: verify ? '#E3D4F6 ' : '#DCC1FE' }}
+            className={'text-white hover:!bg-[#a68ade] '}
           >
             <div className="flex items-center justify-center gap-2">
               {(!verify && recastClicked) && (
@@ -440,7 +440,7 @@ export default function UserAddress() {
           </Button>
           <Button
             style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
-            className=""
+            className={ verify?'hover:!bg-[#71a650]':''}
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
           >

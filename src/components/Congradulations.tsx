@@ -73,15 +73,18 @@ export default function Congratulations() {
         recastLoading: true,
       })
       VerifyTranspond({ fid: context.user.fid + '' })
-        .then((res) => {
-          if (res.message == 'Cast OK') {
-            setVerify(true)
-            messageApi.success('Recast Successfully')
+        .then(
+          (res) => {
+            if (res.message == 'Cast OK') {
+              setVerify(true)
+              messageApi.success('Recast Successfully')
+            }
+          },
+          () => {
+            setRecastClicked(true)
+            sdk.actions.openUrl(disposition.second.openUrl)
           }
-        },()=>{
-          setRecastClicked(true)
-          sdk.actions.openUrl(disposition.second.openUrl)
-        })
+        )
         .finally(() =>
           setLoading({
             ...loading,
@@ -120,32 +123,37 @@ export default function Congratulations() {
           fid: context?.user.fid + '',
           address: address || '',
         })
-          .then((res) => {
-            if (res.code === 1) {
-              messageApi.open({
-                type: 'success',
-                content: 'Receive successfully',
-              })
-              setVerify(false)
-              router.push('/rank')
-            } else if (res.msg == 'The current user cannot claim it') {
-              messageApi.open({
-                type: 'info',
-                content: 'You already picked it up',
-              })
-              router.push('/rank')
-            }else if(res.msg == 'The network is abnormal, please try again later.'){
+          .then(
+            (res) => {
+              if (res.code === 1) {
+                messageApi.open({
+                  type: 'success',
+                  content: 'Receive successfully',
+                })
+                setVerify(false)
+                router.push('/rank')
+              } else if (res.msg == 'The current user cannot claim it') {
+                messageApi.open({
+                  type: 'info',
+                  content: 'You already picked it up',
+                })
+                router.push('/rank')
+              } else if (
+                res.msg == 'The network is abnormal, please try again later.'
+              ) {
+                messageApi.open({
+                  type: 'warning',
+                  content: 'The network is abnormal, please try again later.',
+                })
+              }
+            },
+            () => {
               messageApi.open({
                 type: 'warning',
                 content: 'The network is abnormal, please try again later.',
               })
             }
-          },()=>{
-            messageApi.open({
-              type: 'warning',
-              content: 'The network is abnormal, please try again later.',
-            })
-          })
+          )
           .finally(() =>
             setLoading({
               ...loading,
@@ -232,9 +240,11 @@ export default function Congratulations() {
           >
             Claim
           </Button>
-          <p className="-mt-4 font-[12px] text-[#9E9E9E]">
-            You have to recast first.
-          </p>
+          {!verify && (
+            <p className="-mt-4 font-[12px] text-[#9E9E9E]">
+              You have to recast first.
+            </p>
+          )}
         </div>
         {rewardData?.status === 3 && (
           <div className="text-xs font-bold text-center text-[#999] mt-3">

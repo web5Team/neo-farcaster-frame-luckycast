@@ -143,7 +143,7 @@ export default function Rank() {
             </div>
             <div className="text-sm text-[#686a6c] flex gap-1 items-center">
               <img src={stroke.src} className="w-3 h-3" alt="" />
-              <span className="text-sm leading-6 font-medium">Balance</span>
+              <span className="text-sm leading-6 font-medium">Total Earnings</span>
             </div>
           </div>
         </div>
@@ -215,7 +215,7 @@ export default function Rank() {
                 <div className="flex flex-col gap-1">
                   <div className="text-2xl font-bold ">{item.name}</div>
                   <div className="text-base font-bold">
-                    <span className="text-[#686a6c]">Total earn </span>
+                    <span className="text-[#686a6c]">Total Earnings </span>
                     <span className="ml-1"> {item.number} GAS</span>
                   </div>
                 </div>
