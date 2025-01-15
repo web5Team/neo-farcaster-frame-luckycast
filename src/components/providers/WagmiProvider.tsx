@@ -61,6 +61,7 @@ export const config = getDefaultConfig({
     optimism,
     arbitrum,
     base,
+    NeoxProvider,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
   ],
 });
