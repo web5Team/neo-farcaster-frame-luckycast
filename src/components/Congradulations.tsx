@@ -126,6 +126,7 @@ export default function Congratulations() {
                 type: 'success',
                 content: 'Receive successfully',
               })
+              setVerify(false)
               router.push('/rank')
             } else if (res.msg == 'The current user cannot claim it') {
               messageApi.open({
@@ -133,7 +134,17 @@ export default function Congratulations() {
                 content: 'You already picked it up',
               })
               router.push('/rank')
+            }else if(res.msg == 'The network is abnormal, please try again later.'){
+              messageApi.open({
+                type: 'warning',
+                content: 'The network is abnormal, please try again later.',
+              })
             }
+          },()=>{
+            messageApi.open({
+              type: 'warning',
+              content: 'The network is abnormal, please try again later.',
+            })
           })
           .finally(() =>
             setLoading({
