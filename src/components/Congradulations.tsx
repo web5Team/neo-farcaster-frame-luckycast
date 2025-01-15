@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom'
 import { useAccount, useDisconnect } from 'wagmi'
 import AccountUrlDisplayer from './ui/AccountUrlDisplayer'
 import { useOnClickOutside } from 'usehooks-ts'
+import DisconnectButton from './ui/DisconnectButton'
 
 export default function Congratulations() {
   const [verify, setVerify] = useState(false)
@@ -163,8 +164,9 @@ export default function Congratulations() {
           <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
             <AccountUrlDisplayer text={address || ''} />
           </div>
-          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection z-1">
-            <button>Disconnect</button>
+          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection z-1">
+            <DisconnectButton />
+            {/* <button>Disconnect</button> */}
           </div>
         </div>
       ), document.body)}

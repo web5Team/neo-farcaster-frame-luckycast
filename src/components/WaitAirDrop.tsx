@@ -12,6 +12,7 @@ import Congratulations from './Congradulations'
 import InfoDialog from './ui/InfoDialog'
 import { useOnClickOutside } from 'usehooks-ts'
 import { createPortal } from 'react-dom'
+import DisconnectButton from './ui/DisconnectButton'
 
 export default function Wait() {
   const router = useRouter()
@@ -86,8 +87,9 @@ export default function Wait() {
           <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
             <AccountUrlDisplayer text={address || ''} />
           </div>
-          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} onClick={() => disconnect()} className="UserPage-Disconnection z-1">
-            <button>Disconnect</button>
+          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection z-1">
+            <DisconnectButton />
+            {/* <button>Disconnect</button> */}
           </div>
         </div>
       ), document.body)}
