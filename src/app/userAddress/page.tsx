@@ -316,6 +316,7 @@ export default function UserAddress() {
         <div onClick={() => setIsVisible(true)} className="UserPage-Displayer">
           <AccountUrlDisplayer text={address || ''} />
         </div>
+        {/* <div onClick={()=>router.push('/rank')}>Rank</div> */}
         <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection">
           <DisconnectButton />
           {/* <Button>Disconnect</Button> */}

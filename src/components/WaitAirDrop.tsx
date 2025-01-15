@@ -27,7 +27,7 @@ export default function Wait() {
 
       let amo = 0
       function tryRecast() {
-        console.log("try verify recast status")
+        console.log('try verify recast status')
         if (amo >= 10) return
 
         if (context?.user.fid === undefined) {
@@ -39,7 +39,6 @@ export default function Wait() {
           return
         }
 
-
         recast()
       }
 
@@ -50,54 +49,73 @@ export default function Wait() {
 
   const [messageApi, contextHolder] = message.useMessage()
   const recast = () => {
-
     setLoading(true)
     GetReward({
       fid: context?.user.fid + '',
       address: address || '',
-    }).then((res) => {
-      setLoading(false)
-      if (res.code === 1) {
-        if (res.data.status === 4) {
-          router.push('/rank')
-        } else if (res.data.status === 2 || res.data.status === 3) {
-          setClaim(true)
-        } else if (res.data.status === 1) {
-          messageApi.info('To be reviewed')
-        }
-      }
     })
+      .then((res) => {
+        if (res.code === 1) {
+          if (res.data.status === 4) {
+            router.push('/rank')
+          } else if (res.data.status === 2 || res.data.status === 3) {
+            setClaim(true)
+          } else if (res.data.status === 1) {
+            messageApi.info('To be reviewed')
+          }
+        }
+      })
+      .finally(() => setLoading(false))
   }
 
   const { disconnect } = useDisconnect()
-  const wrapperRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const wrapperRef = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleClickOutside = () => {
     setIsVisible(false)
-  };
+  }
   // @ts-expect-error nextline
-  useOnClickOutside(wrapperRef, handleClickOutside);
+  useOnClickOutside(wrapperRef, handleClickOutside)
 
   return (
     <>
       <>{contextHolder}</>
-      {!claim && createPortal((
-        <div className='WaitPage-Header'>
-          <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
-            <AccountUrlDisplayer text={address || ''} />
-          </div>
-          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection z-1">
-            <DisconnectButton />
-            {/* <button>Disconnect</button> */}
-          </div>
-        </div>
-      ), document.body)}
+      {!claim &&
+        createPortal(
+          <div className="WaitPage-Header">
+            <div
+              onClick={() => setIsVisible(true)}
+              className="WaitPage-Displayer"
+            >
+              <AccountUrlDisplayer text={address || ''} />
+            </div>
+            <div
+              ref={wrapperRef}
+              style={{ display: isVisible ? '' : 'none' }}
+              className="UserPage-Disconnection z-1"
+            >
+              <DisconnectButton />
+              {/* <button>Disconnect</button> */}
+            </div>
+          </div>,
+          document.body
+        )}
 
-      <InfoDialog isOpen={true} emoji="🤩" onClose={() => void 0} className={'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' + (claim ? ' hidden' : '')}>
-        <div className='text-center'>
-          <h1 className='text-3xl text-black font-bold'>Great!</h1>
-          <p className='my-2 font-[12px] text-[#C7C7C7]'>You have successfully submitted and are awaiting confirmation.</p>
+      <InfoDialog
+        isOpen={true}
+        emoji="🤩"
+        onClose={() => void 0}
+        className={
+          'WaitPage-Main px-10 py-28 flex justify-center items-center gap-2 flex-col' +
+          (claim ? ' hidden' : '')
+        }
+      >
+        <div className="text-center">
+          <h1 className="text-3xl text-black font-bold">Great!</h1>
+          <p className="my-2 font-[12px] text-[#C7C7C7]">
+            You have successfully submitted and are awaiting confirmation.
+          </p>
           {/* <Spin className='text-base font-bold' tip="wait..."></Spin> */}
           <Button
             isLoading={loading}
@@ -109,7 +127,7 @@ export default function Wait() {
         </div>
       </InfoDialog>
 
-      <InfoDialog emoji='🥳' isOpen={claim} onClose={() => setClaim(false)}>
+      <InfoDialog emoji="🥳" isOpen={claim} onClose={() => setClaim(false)}>
         <Congratulations />
       </InfoDialog>
     </>

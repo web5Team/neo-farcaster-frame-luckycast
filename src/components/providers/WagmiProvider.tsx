@@ -56,13 +56,14 @@ export const config = getDefaultConfig({
   appName: 'luckycast',
   projectId: '9ae9e04b154850d9edb3b5efe96ae2f2',
   chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
     NeoxProvider,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
+    // mainnet,
+    // polygon,
+    // optimism,
+    // arbitrum,
+    // base,
+   
+    // ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
   ],
 });
 

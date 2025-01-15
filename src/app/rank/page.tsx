@@ -12,13 +12,14 @@ import {
 import sdk, { FrameContext } from '@farcaster/frame-sdk'
 import { TRank, TReward } from '@/composables/api/models'
 import { useRouter } from 'next/navigation'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useDisconnect,useBalance } from 'wagmi'
 import AccountUrlDisplayer from '@/components/ui/AccountUrlDisplayer'
 import InfoDialog from '@/components/ui/InfoDialog'
 import help from '@/image/HELP_.png'
 import stroke from '@/image/stroke.svg'
 import rankNum from '@/image/rankNum.png'
 import { useOnClickOutside } from 'usehooks-ts'
+import { NeoxProvider } from '@/components/providers/NeoxProvider';
 
 export default function Rank() {
   const router = useRouter()
@@ -27,7 +28,11 @@ export default function Rank() {
   const [rewardData, setRewardData] = useState<TReward>()
   const { mutateAsync: FarcasterRank } = useFarcasterRankMutation()
   const { mutateAsync: GetReward } = useGetRewardMutation()
-  const { isConnected, address } = useAccount()
+  const { isConnected, address } = useAccount(),{data:userBalance} = useBalance({
+    address,
+    chainId:NeoxProvider.id
+  })
+  console.log(userBalance)
   const [userInfo, setUserInfo] = useState({
     picUrl: '',
     displayName: '',
@@ -128,7 +133,7 @@ export default function Rank() {
           <p className="text-[28px]">@{userInfo.username}</p>
           <div className="flex flex-col gap-2">
             <div className="text-xl font-bold  leading-[30px]">
-              {rewardData?.balance} GAS
+              {userBalance?.formatted} GAS
             </div>
             <div className="text-sm text-[#686a6c] flex gap-1 items-center">
               <img src={stroke.src} className="w-3 h-3" alt="" />

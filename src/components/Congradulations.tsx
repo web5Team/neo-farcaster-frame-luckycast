@@ -52,7 +52,8 @@ export default function Congratulations() {
   const getReward = () => {
     GetReward({
       fid: context?.user.fid + '',
-      address: address || '', }).then((res) => {
+      address: address || '',
+    }).then((res) => {
       if (res.code === 1) {
         setRewardData(res.data)
       }
@@ -66,33 +67,34 @@ export default function Congratulations() {
     sumbitLoading: false,
   })
   const recast = async () => {
-
     if (context && context?.user.fid) {
       setLoading({
         ...loading,
         recastLoading: true,
       })
-      VerifyTranspond({ fid: context.user.fid + '' }).then((res) => {
-        setLoading({
-          ...loading,
-          recastLoading: false,
-        })
-        if (res.message == 'Cast OK') {
-          setVerify(true)
-          messageApi.success('Recast Successfully')
-        } else {
-
+      VerifyTranspond({ fid: context.user.fid + '' })
+        .then((res) => {
+          if (res.message == 'Cast OK') {
+            setVerify(true)
+            messageApi.success('Recast Successfully')
+          }
+        },()=>{
           setRecastClicked(true)
           sdk.actions.openUrl(disposition.second.openUrl)
-        }
-      })
+        })
+        .finally(() =>
+          setLoading({
+            ...loading,
+            recastLoading: false,
+          })
+        )
     }
   }
 
   let lastClickTime = -1
 
   const sumbit = () => {
-    if ( loading.sumbitLoading ) return
+    if (loading.sumbitLoading) return
 
     if (!verify) {
       messageApi.warning('Please Recast')
@@ -117,25 +119,28 @@ export default function Congratulations() {
         Receive({
           fid: context?.user.fid + '',
           address: address || '',
-        }).then((res) => {
-          setLoading({
-            ...loading,
-            sumbitLoading: false,
-          })
-          if (res.code === 1) {
-            messageApi.open({
-              type: 'success',
-              content: 'Receive successfully',
-            })
-            router.push('/rank')
-          } else if (res.msg == 'The current user cannot claim it') {
-            messageApi.open({
-              type: 'info',
-              content: 'You already picked it up',
-            })
-            router.push('/rank')
-          }
         })
+          .then((res) => {
+            if (res.code === 1) {
+              messageApi.open({
+                type: 'success',
+                content: 'Receive successfully',
+              })
+              router.push('/rank')
+            } else if (res.msg == 'The current user cannot claim it') {
+              messageApi.open({
+                type: 'info',
+                content: 'You already picked it up',
+              })
+              router.push('/rank')
+            }
+          })
+          .finally(() =>
+            setLoading({
+              ...loading,
+              sumbitLoading: false,
+            })
+          )
       } else {
         messageApi.open({
           type: 'warning',
@@ -146,30 +151,38 @@ export default function Congratulations() {
   }
 
   const { disconnect } = useDisconnect()
-  const wrapperRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const wrapperRef = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   const { address } = useAccount()
   const handleClickOutside = () => {
     setIsVisible(false)
-  };
+  }
   // @ts-expect-error nextline
-  useOnClickOutside(wrapperRef, handleClickOutside);
+  useOnClickOutside(wrapperRef, handleClickOutside)
 
   return (
     <>
       <>{contextHolder}</>
-      {createPortal((
-        <div className='WaitPage-Header'>
-          <div onClick={() => setIsVisible(true)} className="WaitPage-Displayer">
+      {createPortal(
+        <div className="WaitPage-Header">
+          <div
+            onClick={() => setIsVisible(true)}
+            className="WaitPage-Displayer"
+          >
             <AccountUrlDisplayer text={address || ''} />
           </div>
-          <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection z-1">
+          <div
+            ref={wrapperRef}
+            style={{ display: isVisible ? '' : 'none' }}
+            className="UserPage-Disconnection z-1"
+          >
             <DisconnectButton />
             {/* <button>Disconnect</button> */}
           </div>
-        </div>
-      ), document.body)}
+        </div>,
+        document.body
+      )}
       <div className="px-6 py-4 flex flex-col justify-between">
         <div>
           <div className="text-2xl text-black in text-center font-bold">
@@ -193,16 +206,12 @@ export default function Congratulations() {
             className="text-white"
           >
             <div className="flex items-center justify-center gap-2">
-              {(!verify && recastClicked) && (
-                <span>Refresh</span>
+              {!verify && recastClicked && <span>Refresh</span>}
+              {(verify || !recastClicked) && (
+                <>
+                  {verify && <img src={circleCheck.src} alt="check" />} Recast
+                </>
               )}
-              {
-                (verify || !recastClicked) && (
-                  <>
-                    {verify && <img src={circleCheck.src} alt="check" />} Recast
-                  </>
-                )
-              }
             </div>
           </Button>
           <Button
