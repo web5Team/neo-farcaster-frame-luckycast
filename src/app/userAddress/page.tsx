@@ -5,7 +5,11 @@ import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
 import { Input, message, Spin } from 'antd'
-import { LoadingOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import {
+  LoadingOutlined,
+  CloseOutlined,
+  CheckOutlined,
+} from '@ant-design/icons'
 import { useRouter } from 'next/navigation'
 import Common from '@/components/ui/common'
 import { Button } from '@/components/ui/Button'
@@ -113,42 +117,58 @@ export default function UserAddress() {
       }, 100)
       return
     }
+    if (rewardRes.data.status === 1) {
+      setTimeout(() => {
+        setGlobalLoading(false)
+        setDone(true)
+      }, 100)
+      return
+    } else if (rewardRes.data.status == 2) {
+      setTimeout(() => {
+        setGlobalLoading(false)
+        setDone(true)
+      }, 100)
+      return
+    }
 
-    VerifyTranspond({ fid: res.fid + '' }).then(() => {
-      console.log('VerifyTranspond')
-      setVerify(true)
+    VerifyTranspond({ fid: res.fid + '' })
+      .then(() => {
+        console.log('VerifyTranspond')
+        setVerify(true)
 
-      SumbitData({
-        fid: res.fid + '',
-        nickname: res.username || '',
-        email: '',
-        address: address + '',
-        team_code: teamCode.trim(),
-      }).then((res) => {
-        if (res.code === 1) {
-          setDone(true)
-        } else if (res.msg == 'The current data has been submitted') {
-          setDone(true)
-        }
+        SumbitData({
+          fid: res.fid + '',
+          nickname: res.username || '',
+          email: '',
+          address: address + '',
+          team_code: teamCode.trim(),
+        })
+          .then((res) => {
+            if (res.code === 1) {
+              setDone(true)
+            } else if (res.msg == 'The current data has been submitted') {
+              setDone(true)
+            }
 
-        setTimeout(() => {
-          setGlobalLoading(false)
-        }, 100)
-      }).catch(() => {
+            setTimeout(() => {
+              setGlobalLoading(false)
+            }, 100)
+          })
+          .catch(() => {
+            setTimeout(() => {
+              setGlobalLoading(false)
+            }, 100)
+          })
+      })
+      .catch(() => {
         setTimeout(() => {
           setGlobalLoading(false)
         }, 100)
       })
-    }).catch(() => {
-      setTimeout(() => {
-        setGlobalLoading(false)
-      }, 100)
-    })
   }
 
   useEffect(() => {
     if (isConnected) {
-
       setTimeout(async () => {
         handleSigned()
       })
@@ -181,8 +201,6 @@ export default function UserAddress() {
     }
 
     if (context && context?.user.fid) {
-
-
       setLoading({
         ...loading,
         recastLoading: true,
@@ -270,37 +288,37 @@ export default function UserAddress() {
     }
   }
 
-  const wrapperRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const wrapperRef = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleClickOutside = () => {
     setIsVisible(false)
-  };
+  }
   // @ts-expect-error nextline
-  useOnClickOutside(wrapperRef, handleClickOutside);
+  useOnClickOutside(wrapperRef, handleClickOutside)
   const [showOpen, setShowOpen] = useState(false)
 
   // a useDocumentVisible hook
   const useDocumentVisible = () => {
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(true)
 
     useEffect(() => {
       const handler = () => {
-        setVisible(!document.hidden);
+        setVisible(!document.hidden)
 
         if (visible) {
           recast()
         }
-      };
+      }
 
-      document.addEventListener('visibilitychange', handler);
+      document.addEventListener('visibilitychange', handler)
 
       return () => {
-        document.removeEventListener('visibilitychange', handler);
-      };
-    }, []);
+        document.removeEventListener('visibilitychange', handler)
+      }
+    }, [])
 
-    return visible;
+    return visible
   }
 
   const [verifyCodeLoading, setVerifyCodeLoading] = useState(false)
@@ -327,7 +345,11 @@ export default function UserAddress() {
           <AccountUrlDisplayer text={address || ''} />
         </div>
         {/* <div onClick={()=>router.push('/rank')}>Rank</div> */}
-        <div ref={wrapperRef} style={{ display: isVisible ? '' : 'none' }} className="UserPage-Disconnection">
+        <div
+          ref={wrapperRef}
+          style={{ display: isVisible ? '' : 'none' }}
+          className="UserPage-Disconnection"
+        >
           <DisconnectButton />
           {/* <Button>Disconnect</Button> */}
         </div>
@@ -356,7 +378,10 @@ export default function UserAddress() {
             <Input
               value={teamCode}
               className="w-[150px] rounded-1xl py-2"
-              style={{ color: verifyStatus === 2 ? '#FF4D4F' : '', border: verifyStatus === 2 ? '1px solid #FF4D4F' : '' }}
+              style={{
+                color: verifyStatus === 2 ? '#FF4D4F' : '',
+                border: verifyStatus === 2 ? '1px solid #FF4D4F' : '',
+              }}
               onChange={(e) => {
                 setTeamCode(e.target.value)
 
@@ -368,15 +393,17 @@ export default function UserAddress() {
               variant="filled"
               onBlur={verifyCode}
             />
-            {
-              verifyCodeLoading && (<Spin className='mx-2' indicator={<LoadingOutlined spin />} />)
-            }
-            {
-              verifyStatus === 1 && (<span className='color-[#7EBE71]'><CheckOutlined /></span>)
-            }
-            {
-              verifyStatus === 2 && (<span className='text-[#FF4D4F]'>Unavailable</span>)
-            }
+            {verifyCodeLoading && (
+              <Spin className="mx-2" indicator={<LoadingOutlined spin />} />
+            )}
+            {verifyStatus === 1 && (
+              <span className="color-[#7EBE71]">
+                <CheckOutlined />
+              </span>
+            )}
+            {verifyStatus === 2 && (
+              <span className="text-[#FF4D4F]">Unavailable</span>
+            )}
           </div>
 
           {/* <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
@@ -448,16 +475,12 @@ export default function UserAddress() {
             className={'text-white hover:!bg-[#a68ade] '}
           >
             <div className="flex items-center justify-center gap-2">
-              {(!verify && recastClicked) && (
-                <span>Refresh</span>
+              {!verify && recastClicked && <span>Refresh</span>}
+              {(verify || !recastClicked) && (
+                <>
+                  {verify && <img src={circleCheck.src} alt="check" />} Recast
+                </>
               )}
-              {
-                (verify || !recastClicked) && (
-                  <>
-                    {verify && <img src={circleCheck.src} alt="check" />} Recast
-                  </>
-                )
-              }
             </div>
           </Button>
           <Button
@@ -473,14 +496,19 @@ export default function UserAddress() {
           </p>
         </div>
 
-        {
-          createPortal((
-            <div className='transition-all absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white' style={{ zIndex: '1000', opacity: globalLoading ? '1' : '0', pointerEvents: !globalLoading ? 'none' : 'auto' }}>
-              <Spin indicator={<LoadingOutlined spin />} size="large" />
-            </div>
-          ), document.body)
-        }
-
+        {createPortal(
+          <div
+            className="transition-all absolute flex justify-center items-center top-0 left-0 w-full h-full bg-white"
+            style={{
+              zIndex: '1000',
+              opacity: globalLoading ? '1' : '0',
+              pointerEvents: !globalLoading ? 'none' : 'auto',
+            }}
+          >
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </div>,
+          document.body
+        )}
       </Common>
     </>
   )

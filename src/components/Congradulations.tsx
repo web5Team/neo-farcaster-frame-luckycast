@@ -147,12 +147,12 @@ export default function Congratulations() {
                 })
               }
             },
-            () => {
+            (res) => {
               messageApi.open({
                 type: 'warning',
-                content: 'The network is abnormal, please try again later.',
+                content: typeof res ==='string' ?res: 'The network is abnormal, please try again later.',
               })
-            }
+            },
           )
           .finally(() =>
             setLoading({

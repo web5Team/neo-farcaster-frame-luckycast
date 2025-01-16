@@ -3,6 +3,10 @@ import disposition from '../disposition'
 import { client } from './client'
 import { ApiResult, TRank, TReward } from './models'
 
+// 定义一个类型key为string，value为any类型的对象
+const fatchRank:{
+  [key: string]:number
+} = {}
 export function useFarcasterRankMutation() {
   return useMutation({
     mutationKey: ['farcasterRank'],
@@ -53,14 +57,20 @@ export function useGetRewardMutation() {
   })
 }
 
+
 export function useReceiveMutation() {
   return useMutation({
     mutationKey: ['receive'],
-    mutationFn: (body: { fid: string, address: string }) =>
-      client<ApiResult<string>>('/index.php/api/farcaster/receive', {
+    mutationFn: (body: { fid: string, address: string }) =>{
+      const time = fatchRank['receive']
+      if(time && Date.now() - new Date(time).getTime() < 1000 * 10){
+        return Promise.reject('not allow ')
+      }else fatchRank['receive'] = Date.now()
+      return client<ApiResult<string>>('/index.php/api/farcaster/receive', {
         method: 'POST',
         body,
-      }),
+      })
+    }
   })
 }
 
