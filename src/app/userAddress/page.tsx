@@ -474,7 +474,7 @@ export default function UserAddress() {
             isDefault={true}
             onClick={recast}
             style={{ backgroundColor: verify ? '#E3D4F6 ' : '#DCC1FE' }}
-            className={verify ? '' : 'hover:!bg-[#a68ade] ' + 'text-white'}
+            className={(verify ? '' : 'hover:!bg-[#a68ade] ') + 'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
               {!verify && recastClicked && <span>Refresh</span>}
