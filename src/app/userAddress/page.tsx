@@ -486,7 +486,7 @@ export default function UserAddress() {
           </Button>
           <Button
             style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
-            className={verify ? 'hover:!bg-[#71a650]' : ''}
+            className={verify ? 'hover:!bg-[#60A842]' : ''}
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
           >

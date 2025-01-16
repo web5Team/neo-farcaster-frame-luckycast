@@ -236,6 +236,7 @@ export default function Congratulations() {
             style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
+            className={verify ? '' : 'hover:!bg-[#60A842]'}
           >
             Claim
           </Button>
