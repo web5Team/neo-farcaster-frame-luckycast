@@ -1,10 +1,10 @@
 const data = {
   first: {
-    openUrl: 'https://warpcast.com/loopman/0x3a491bd7',
+    openUrl: 'https://warpcast.com/dacihua/0x5b8c0305',
     verifyUrl: 'https://matiz.domino.run/automations/NqmtXp4Ze4bqZnhzf1VgeOOEybV6M%2Fc50e09q8Jx7D0%3D'
   },
   second: {
-    openUrl: 'https://warpcast.com/loopman/0xf0e54b4c',
+    openUrl: 'https://warpcast.com/dacihua/0x0b8c8358',
     verifyUrl: 'https://matiz.domino.run/automations/NqmtXp4Ze4bqZnhzf1VgeNThfu0Msq61Gh8THsgPtwo%3D'
   },
   // openUrl:'https://warpcast.com/neoblockchain/0x1ce37e79',
