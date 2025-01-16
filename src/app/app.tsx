@@ -7,23 +7,51 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import './app-style.css'
 import { useAccount } from 'wagmi'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+
+import {
+  isAndroid,
+  isChrome,
+  isDesktop,
+  isEdge,
+  isFirefox,
+  isIE,
+  isIOS,
+  isMacOs,
+  isMobile,
+  isMobileOnly,
+  isMobileSafari,
+  isSafari,
+  isTablet,
+  isWindows,
+} from 'react-device-detect';
+import InfoDialog from '@/components/ui/InfoDialog'
 
 export default function App() {
   const router = useRouter()
   const { isConnected, address } = useAccount()
 
+  const [notSupportYet, setNotSupportYet] = useState(false)
+
   sdk.actions.ready()
 
   useEffect(() => {
+    if (isMobile) {
+      setNotSupportYet(true)
+
+      return
+    }
+
     if (isConnected) {
       router.push('/userAddress')
       console.log(`钱包已连接，地址：${address}`)
     } else {
       console.log('钱包未连接')
     }
-  }, [isConnected, address])
+  }, [isConnected, address, notSupportYet])
+
+
 
   return (
     <Common>
@@ -51,6 +79,18 @@ export default function App() {
           <ConnectButton />
         </div>
       </div>
+
+      {notSupportYet && (
+        <InfoDialog
+          emoji="🥺"
+          isOpen={notSupportYet}
+        >
+          <div className="text-black my-4 text-center">
+            <p className="font-bold text-2xl">SORRY~</p>
+            <p className='text-[#C7C7C7]'>Mobile is not yet supported, please go to your computer to use this app.</p>
+          </div>
+        </InfoDialog>
+      )}
     </Common>
   )
 }

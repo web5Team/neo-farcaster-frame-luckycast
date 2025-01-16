@@ -169,7 +169,6 @@ export default function Congratulations() {
     }
   }
 
-  const { disconnect } = useDisconnect()
   const wrapperRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -222,7 +221,7 @@ export default function Congratulations() {
             onClick={recast}
             isDefault={true}
             style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
-            className="text-white"
+            className={verify ? '' : 'hover:!bg-[#a68ade] ' + 'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
               {!verify && recastClicked && <span>Refresh</span>}

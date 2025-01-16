@@ -387,6 +387,7 @@ export default function UserAddress() {
             <InfoDialog
               emoji="🥵"
               isOpen={failed}
+              disconnective
             >
               <div className="text-black my-4 text-center">
                 <p className="font-bold text-2xl">SORRY~</p>
@@ -445,7 +446,7 @@ export default function UserAddress() {
             isDefault={true}
             onClick={recast}
             style={{ backgroundColor: verify ? '#E3D4F6 ' : '#DCC1FE' }}
-            className={'text-white hover:!bg-[#a68ade] '}
+            className={verify ? '' : 'hover:!bg-[#a68ade] ' + 'text-white'}
           >
             <div className="flex items-center justify-center gap-2">
               {(!verify && recastClicked) && (
@@ -468,9 +469,9 @@ export default function UserAddress() {
           >
             Submit
           </Button>
-          <p className="-mt-4 font-[12px] text-[#9E9E9E]">
+          {!verify && <p className="-mt-4 font-[12px] text-[#9E9E9E]">
             You have to recast first.
-          </p>
+          </p>}
         </div>
 
         {
