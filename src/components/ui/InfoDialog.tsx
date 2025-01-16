@@ -6,6 +6,8 @@ import AccountUrlDisplayer from './AccountUrlDisplayer';
 import DisconnectButton from './DisconnectButton';
 import { useAccount } from 'wagmi';
 
+import { useOnClickOutside } from 'usehooks-ts'
+
 interface InfoDialogProps {
   emoji?: string;
   isOpen: boolean;

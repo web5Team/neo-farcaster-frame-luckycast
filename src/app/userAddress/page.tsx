@@ -304,6 +304,7 @@ export default function UserAddress() {
 
     useEffect(() => {
       const handler = () => {
+
         setVisible(!document.hidden)
 
         if (visible) {
