@@ -6,7 +6,7 @@ import CloseIcon from '@/image/close square.svg'
 interface InfoDialogProps {
   emoji?: string;
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children?: React.ReactNode;
   className?: string
   closable?: boolean

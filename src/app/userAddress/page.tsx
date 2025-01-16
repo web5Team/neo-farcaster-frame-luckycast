@@ -33,10 +33,10 @@ export default function UserAddress() {
   const router = useRouter()
   const { isConnected, address } = useAccount()
   const [context, setContext] = useState<FrameContext>()
-  const { disconnect } = useDisconnect()
 
   const [teamCode, setTeamCode] = useState('')
   const [verify, setVerify] = useState(false)
+  const [failed, setFailed] = useState(false)
   const [done, setDone] = useState(false)
   const [userInfo, setUserInfo] = useState({
     picUrl: '',
@@ -95,6 +95,16 @@ export default function UserAddress() {
       fid: res.fid + '',
       address: address + '',
     })
+
+    if (rewardRes.code === 0 && rewardRes.msg === 'The current event has ended') {
+      // event end
+      setTimeout(() => {
+        setGlobalLoading(false)
+
+        setFailed(true)
+      }, 100)
+      return
+    }
 
     if (rewardRes.code === 0 && rewardRes.msg === 'reward does not exist') {
       // new user - no action
@@ -346,7 +356,7 @@ export default function UserAddress() {
             <Input
               value={teamCode}
               className="w-[150px] rounded-1xl py-2"
-              style={{ color: verifyStatus === 2 ? '#FF4D4F' : '', border: verifyStatus === 2 ? '1px solid #FF4D4F' : ''}}
+              style={{ color: verifyStatus === 2 ? '#FF4D4F' : '', border: verifyStatus === 2 ? '1px solid #FF4D4F' : '' }}
               onChange={(e) => {
                 setTeamCode(e.target.value)
 
@@ -359,7 +369,7 @@ export default function UserAddress() {
               onBlur={verifyCode}
             />
             {
-              verifyCodeLoading && (<Spin className='mx-2' indicator={<LoadingOutlined spin />} />) 
+              verifyCodeLoading && (<Spin className='mx-2' indicator={<LoadingOutlined spin />} />)
             }
             {
               verifyStatus === 1 && (<span className='color-[#7EBE71]'><CheckOutlined /></span>)
@@ -372,6 +382,18 @@ export default function UserAddress() {
           {/* <Modal open={showOpen} onOk={() => setShowOpen(false)} onCancel={() => setShowOpen(false)}>
             <div>this is a help session.</div>
           </Modal> */}
+
+          {failed && (
+            <InfoDialog
+              emoji="🥵"
+              isOpen={failed}
+            >
+              <div className="text-black my-4 text-center">
+                <p className="font-bold text-2xl">SORRY~</p>
+                <p className='text-[#C7C7C7]'>You are not qualified in this event, please wait for the next reward.</p>
+              </div>
+            </InfoDialog>
+          )}
 
           {done &&
             createPortal(
@@ -440,7 +462,7 @@ export default function UserAddress() {
           </Button>
           <Button
             style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
-            className={ verify?'hover:!bg-[#71a650]':''}
+            className={verify ? 'hover:!bg-[#71a650]' : ''}
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
           >
