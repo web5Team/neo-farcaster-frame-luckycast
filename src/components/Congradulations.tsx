@@ -221,7 +221,7 @@ export default function Congratulations() {
             onClick={recast}
             isDefault={true}
             style={{ backgroundColor: verify ? '#E3D4F6' : '#DCC1FE' }}
-            className={(verify ? '' : 'hover:!bg-[#a68ade] ') + 'text-white'}
+            className={(verify ? '' : 'hover:!bg-[#a68ade] ') + 'text-white h-[64PX]'}
           >
             <div className="flex items-center justify-center gap-2">
               {!verify && recastClicked && <span>Refresh</span>}
@@ -236,7 +236,7 @@ export default function Congratulations() {
             style={{ backgroundColor: verify ? '#77BB69' : '#A0A0A0' }}
             isLoading={loading.sumbitLoading}
             onClick={sumbit}
-            className={verify ? '' : 'hover:!bg-[#60A842]'}
+            className={!verify ? 'h-[64PX]' : 'hover:!bg-[#60A842] h-[64PX]'}
           >
             Claim
           </Button>
