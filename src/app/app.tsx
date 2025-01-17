@@ -37,7 +37,7 @@ export default function App() {
   sdk.actions.ready()
 
   useEffect(() => {
-    if (isMobile) {
+    if (isMobile || isIOS) {
       setNotSupportYet(true)
 
       return
