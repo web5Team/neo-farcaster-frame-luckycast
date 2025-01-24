@@ -117,6 +117,9 @@ export default function UserAddress() {
       }, 100)
       return
     }
+    if(rewardRes.data.status === 3 || rewardRes.data.status === 4 ){
+      router.push('/rank')
+    }
     if (rewardRes.data.status === 1) {
       setTimeout(() => {
         setGlobalLoading(false)
