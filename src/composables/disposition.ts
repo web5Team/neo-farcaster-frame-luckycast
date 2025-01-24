@@ -5,7 +5,7 @@ const data = {
       'https://matiz.domino.run/automations/NqmtXp4Ze4bqZnhzf1VgeOOEybV6M%2Fc50e09q8Jx7D0%3D',
   },
   second: {
-    openUrl: 'https://warpcast.com/dacihua/0x0b8c8358',
+    openUrl: 'https://warpcast.com/neoblockchain/0x507c659c',
     verifyUrl:
       'https://matiz.domino.run/automations/NqmtXp4Ze4bqZnhzf1VgeNThfu0Msq61Gh8THsgPtwo%3D',
   },
